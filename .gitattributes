@@ -1,0 +1,33 @@
+# Line endings.
+#
+# This matters more than it looks. Cloudflare builds on Linux and runs
+# `sh build.sh`. If build.sh is committed with CRLF, the shell reads the trailing
+# \r as part of the last token on every line and the build dies on something like
+# "build.sh: line 2: $'\r': command not found" — a failure that is invisible on
+# Windows, where everything runs fine.
+#
+# core.autocrlf is true on this machine, so without this file git would have
+# happily stored CRLF. eol=lf pins the shell scripts in BOTH the repo and the
+# working copy; text=auto normalises everything else on the way in.
+
+* text=auto
+
+*.sh   text eol=lf
+*.py   text eol=lf
+*.html text eol=lf
+*.css  text eol=lf
+*.js   text eol=lf
+*.json text eol=lf
+*.md   text eol=lf
+*.svg  text eol=lf
+*.pdb  text eol=lf
+_headers text eol=lf
+
+# Batch files are read by cmd.exe on Windows and stay CRLF.
+*.cmd  text eol=crlf
+
+# Never touched.
+*.png  binary
+*.webp binary
+*.ico  binary
+*.pptx binary

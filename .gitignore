@@ -1,0 +1,32 @@
+# ── Source material ───────────────────────────────────────────────────────────
+# Inputs we work from, not things we deploy. The originals live in
+# ../tooke-lab-archive/ — see README §"Where the originals went". Everything here
+# is either regenerable (structures, via scripts/download-structures.sh) or must
+# be backed up separately (the original photos).
+#
+# Keeping these out of the repo matters: Cloudflare Pages clones the whole
+# repository on every build.
+source/
+
+# Never commit the decks. They are ~450MB and belong in the archive folder.
+*.pptx
+~$*
+
+# ── Build output ──────────────────────────────────────────────────────────────
+# build.sh stages the deployable site here. Cloudflare rebuilds it on every
+# deploy, so a committed copy would only ever be stale.
+_site/
+
+# ── OS / editor noise ─────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.vscode/
+.idea/
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+.venv/
+venv/

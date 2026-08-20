@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research — The Tooke Lab</title>
+<meta name="description" content="Research in the Tooke Lab: structures of penicillin-binding proteins and β-lactamases, time-resolved crystallography, and inhibitor design.">
+<meta name="color-scheme" content="light">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="pg-head">
+  <a class="pg-logo" href="index.html" aria-label="The Tooke Lab — home">
+    <img src="assets/logo.png" alt="The Tooke Lab">
+  </a>
+  <nav class="pg-nav" id="pgNav" aria-label="Sections">
+      <a href="research.html" aria-current="page"><span class="i">01</span>Research</a>
+      <a href="people.html"><span class="i">02</span>Meet the lab</a>
+      <a href="news.html"><span class="i">03</span>News</a>
+      <a href="opportunities.html"><span class="i">04</span>Opportunities</a>
+  </nav>
+  <a class="pg-cta" href="opportunities.html#contact">Get in touch</a>
+  <button class="pg-burger" id="pgBurger" aria-expanded="false" aria-controls="pgNav" aria-label="Menu"><span></span></button>
+</header>
+
+<main>
+
+  <section class="pg-hero pg-hero--centre">
+    <div class="pg-hero-bg">
+      <img src="assets/photos/hero-research-1920.webp"
+           srcset="assets/photos/hero-research-1200.webp 1200w, assets/photos/hero-research-1920.webp 1920w, assets/photos/hero-research-2560.webp 2560w"
+           sizes="100vw" width="1920" height="1080" fetchpriority="high"
+           alt="A crystal of protein viewed through the microscope.">
+    </div>
+    <div class="pg-hero-inner">
+      <span class="pg-num">01</span>
+      <h1>Research</h1>
+    </div>
+    <span class="pg-scroll" aria-hidden="true">Scroll</span>
+  </section>
+
+  <!-- ================================================================
+       Scope · Publications · Structures · Funding
+       ================================================================ -->
+
+  <!-- ---------- 01 Scope ---------- -->
+  <section class="chapter wrap" id="scope">
+    <div class="chapter-head">
+      <span class="chapter-num chapter-num--teal">Scope</span>
+    </div>
+
+    <!-- Headings AND body are Latin on purpose: Cat is writing both blocks.
+         The six images were picked against the themes of her MRC abstract
+         (see scripts/prepare-scope-photos.py) so they should still fit
+         whatever she writes. -->
+    <div class="scope-row">
+      <div class="scope-text">
+        <h2>Lorem ipsum dolor sit</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
+        doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore
+        veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
+        ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
+        consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque
+        porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
+        adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et
+        dolore magnam aliquam quaerat voluptatem.</p>
+      </div>
+      <figure class="photo-figure scope-shot">
+        <div class="frame slideshow" data-slideshow>
+          <img class="ph slide is-on" src="assets/photos/scope-crystals-800.webp"
+               srcset="assets/photos/scope-crystals-800.webp 800w,
+                       assets/photos/scope-crystals-1600.webp 1600w"
+               sizes="(min-width: 900px) 42vw, 100vw"
+               width="800" height="600" loading="lazy" decoding="async"
+               alt="Needle-shaped protein microcrystals seen down the microscope.">
+          <img class="ph slide" src="assets/photos/scope-density-800.webp"
+               srcset="assets/photos/scope-density-800.webp 800w,
+                       assets/photos/scope-density-1600.webp 1600w"
+               sizes="(min-width: 900px) 42vw, 100vw"
+               width="800" height="600" loading="lazy" decoding="async"
+               alt="An antibiotic modelled into its electron density in the enzyme active site.">
+          <img class="ph slide" src="assets/photos/scope-activesite-800.webp"
+               srcset="assets/photos/scope-activesite-800.webp 800w,
+                       assets/photos/scope-activesite-1600.webp 1600w"
+               sizes="(min-width: 900px) 42vw, 100vw"
+               width="800" height="600" loading="lazy" decoding="async"
+               alt="Close-up of the active site, showing the contacts made by a bound penicillin.">
+        </div>
+      </figure>
+    </div>
+
+    <!-- Reversed: picture left, text right. -->
+    <div class="scope-row scope-row--flip">
+      <div class="scope-text">
+        <h2>Consectetur adipiscing elit</h2>
+        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+        praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias
+        excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui
+        officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum
+        quidem rerum facilis est et expedita distinctio.</p>
+        <p>Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit
+        quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est,
+        omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut
+        rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae
+        non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut
+        reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus
+        asperiores repellat.</p>
+      </div>
+      <figure class="photo-figure scope-shot">
+        <div class="frame slideshow" data-slideshow>
+          <img class="ph slide is-on" src="assets/photos/scope-chip-800.webp"
+               srcset="assets/photos/scope-chip-800.webp 800w,
+                       assets/photos/scope-chip-1600.webp 1600w"
+               sizes="(min-width: 900px) 42vw, 100vw"
+               width="800" height="600" loading="lazy" decoding="async"
+               alt="A fixed-target chip used to deliver thousands of crystals to the X-ray beam.">
+          <img class="ph slide" src="assets/photos/scope-droplet-800.webp"
+               srcset="assets/photos/scope-droplet-800.webp 800w"
+               sizes="(min-width: 900px) 42vw, 100vw"
+               width="800" height="600" loading="lazy" decoding="async"
+               alt="The drop-on-demand injector, placing a droplet around 30 microns across.">
+          <img class="ph slide" src="assets/photos/scope-timeres-800.webp"
+               srcset="assets/photos/scope-timeres-800.webp 800w,
+                       assets/photos/scope-timeres-1600.webp 1600w"
+               sizes="(min-width: 900px) 42vw, 100vw"
+               width="800" height="600" loading="lazy" decoding="async"
+               alt="Structures from successive timepoints overlaid, showing the reaction progressing.">
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ---------- 02 Publications ----------
+       Dark band on purpose: every thumbnail is a white journal page, so the
+       ink ground turns the whole list into a wall of paper. -->
+  <section class="band band--ink" id="publications">
+    <div class="wrap">
+      <div class="chapter-head">
+        <span class="chapter-num">Publications</span>
+      </div>
+      <div class="pub-scroll">
+        <div class="pub-list" id="pubList">
+          <p class="pub-fallback">Loading publications…</p>
+        </div>
+      </div>
+
+      <p class="pub-more">
+        <a href="https://researchportal.bath.ac.uk/en/persons/catherine-tooke" class="label label--yellow">
+          Full list on the Bath research portal →
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ---------- 03 Structures ---------- -->
+  <section class="chapter wrap" id="structures">
+    <div class="chapter-head">
+      <span class="chapter-num chapter-num--teal">Structures</span>
+    </div>
+    <p class="band-lead">Every structure the lab has deposited in the Protein Data Bank.</p>
+
+    <div class="collection-layout">
+      <div id="viewerCard">
+        <div class="viewer-loading" id="viewerLoading">Loading structure…</div>
+        <div id="viewer"></div>
+        <div class="viewer-meta">
+          <div>
+            <div class="pid" id="metaPid">6QW9</div>
+            <div class="desc" id="metaDesc">KPC-2 carbapenemase bound to relebactam</div>
+          </div>
+          <!-- href is rewritten by collection.js as the selection changes. -->
+          <a class="pdb-link" id="pdbLink" href="https://www.rcsb.org/structure/6QW9" rel="noopener">
+            View in the PDB →
+          </a>
+        </div>
+      </div>
+      <div class="cat-list" id="catList"><!-- built by collection.js --></div>
+    </div>
+  </section>
+
+  <!-- ---------- 04 Funding ---------- -->
+  <section class="band band--teal" id="funding">
+    <div class="wrap">
+      <div class="chapter-head">
+        <span class="chapter-num">Funding</span>
+      </div>
+      <p class="fund-thanks">
+        This work is only possible because of the sponsors and institutions who
+        support it.
+      </p>
+      <ul class="fund-logos">
+        <!-- MRC first: funder marks normally take precedence over institutional
+             ones under grant terms, and it is shown in its own brand colours
+             because those terms almost always forbid recolouring it. -->
+        <li><img src="assets/brand/Medical_Research_Council_logo.svg" alt="Medical Research Council" width="502" height="169" loading="lazy"></li>
+        <li><img src="assets/brand/norm/bath.png" alt="University of Bath" width="198" height="70" loading="lazy"></li>
+      </ul>
+      <!-- The MRC / UKRI mark still needs sourcing; grant conditions usually
+           require it, so it should sit first in this row once we have it. -->
+      <p class="fund-foot">Grant references available on request.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <span class="label">The Tooke Lab</span>
+        <p class="foot-blurb">
+          Department of Life Sciences &amp; Centre for Evolution,<br>
+          University of Bath, BA2 7AY.
+        </p>
+        <img class="uob-logo" src="assets/brand/uob-logo-inverse.svg"
+             alt="University of Bath" width="180" height="56" loading="lazy">
+      </div>
+      <div>
+        <span class="label">Explore</span>
+        <ul>
+          <li><a href="research.html">Research</a></li>
+          <li><a href="people.html">People</a></li>
+          <li><a href="news.html">News</a></li>
+          <li><a href="opportunities.html">Opportunities</a></li>
+        </ul>
+      </div>
+      <div>
+        <span class="label">Elsewhere</span>
+        <ul>
+          <li><a href="https://researchportal.bath.ac.uk/en/persons/catherine-tooke">Bath research portal</a></li>
+          <li><a href="https://www.rcsb.org/">Protein Data Bank</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-note">
+      <span>© 2026 The Tooke Lab</span>
+      <span>University of Bath</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/ngl@2.0.0-dev.37/dist/ngl.js"></script>
+<script src="pagehead.js"></script>
+<script src="slideshow.js"></script>
+<script src="collection.js"></script>
+<script src="publications-data.js"></script>
+<script src="publications.js"></script>
+</body>
+</html>

@@ -1,0 +1,1368 @@
+/* ============================================================
+     CONCEPT 2 — "RESOLUTION"
+     Double meaning: crystallographic resolution, and resolving a
+     question. Editorial/gallery register — oversized type, flat
+     colour blocks, an unconventional chaptered structure, and Cat's
+     actual PDB depositions presented as a catalogue of work.
+
+     Palette is sampled from her hand-drawn logo. Unlike Concept 1,
+     the exact artwork teal (#47A284) is usable here at full strength
+     because it only ever appears as a BLOCK carrying ink text
+     (5.7:1), never as text on cream (2.9:1, which would fail).
+     Every text/background pair below is contrast-checked to WCAG AA.
+     ============================================================ */
+
+  :root{
+    /* --- Palette, set by the collaborator 18 Aug 2026 ---------------------
+       #47A284 teal · #D4CDEE lavender · #F3C9BB peach · #F0DFA8 yellow
+       · #FAF8F3 off-white
+
+       Note: every colour in that set is light. WHITE TEXT FAILS ON ALL FIVE,
+       including the teal (3.1:1), so every surface here takes dark text. The
+       set also contains no dark value, so --ink and --teal-deep are carried
+       over: they are what make accessible text possible at all.
+       --ink clears AA on all five (worst case 5.74 on the teal). */
+    --ink:        #0F1A16;   /* text on every palette colour · worst 5.7:1 */
+    --cream:      #FAF8F3;   /* palette */
+    --teal:       #47A284;   /* palette · exact logo colour · ink on it 5.7:1 */
+    --lavender:   #D4CDEE;   /* palette · ink on it 11.7:1 */
+    --peach:      #F3C9BB;   /* palette · ink on it 11.8:1 */
+    --yellow:     #F0DFA8;   /* palette · ink on it 13.4:1 */
+    --teal-deep:  #14614A;   /* carried over: coloured TEXT. --teal is only
+                                2.9:1 on off-white and cannot be used for type */
+    --rule:       rgba(15,26,22,.16);
+
+    /* The splash briefly ran its own teal-led palette (--bg/--surface/
+       --muted/--gold/--line, plus local re-points of --ink and --teal-deep
+       on body.splash). Reverted 18 Aug: it made the splash look like a
+       different site to the four pages it leads into. Splash and inner
+       pages now share the palette above. */
+
+    --f-display: 'Fraunces', Georgia, serif;
+    --f-body:    'Inter', system-ui, sans-serif;
+    --f-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+    --maxw: 1440px;
+    --pad: clamp(20px, 5vw, 72px);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  /* The header is sticky, so anchor targets must clear it or the section
+     heading lands underneath it. */
+  section[id]{ scroll-margin-top: clamp(72px, 9vw, 96px); }
+  body{
+    margin:0; background: var(--cream); color: var(--ink);
+    font-family: var(--f-body); font-size: clamp(15px, 1.05vw, 17px);
+    line-height: 1.6; -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  h1,h2,h3{
+    font-family: var(--f-display); margin:0; font-weight: 600;
+    font-variation-settings: 'SOFT' 20, 'WONK' 1;   /* Fraunces' expressive axes */
+    line-height: 1.02; letter-spacing: -0.02em;
+  }
+  p{ margin:0 0 1.1em; }
+  a{ color: inherit; }
+  img{ max-width:100%; display:block; }
+  :focus-visible{ outline: 3px solid var(--teal-deep); outline-offset: 3px; }
+
+  .wrap{ max-width: var(--maxw); margin:0 auto; padding-inline: var(--pad); }
+
+  /* Mono "specimen label" — the recurring device that ties the site together */
+  .label{
+    font-family: var(--f-mono); font-size: clamp(10px, .78vw, 12px);
+    text-transform: uppercase; letter-spacing: .14em; font-weight: 500;
+  }
+
+  /* ---------------- Header ---------------- */
+  header{
+    position: sticky; top:0; z-index:60;
+    background: var(--cream);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav{
+    max-width: var(--maxw); margin:0 auto; padding: 12px var(--pad);
+    display:flex; align-items:center; justify-content:space-between; gap:24px;
+  }
+  .nav img{ height: clamp(40px, 4.4vw, 58px); width:auto; }
+  .nav ul{
+    display:flex; gap: clamp(16px, 2vw, 34px); list-style:none; margin:0; padding:0;
+  }
+  .nav ul a{
+    text-decoration:none; font-family: var(--f-mono); font-size: 12px;
+    text-transform: uppercase; letter-spacing:.1em; padding: 6px 0;
+    border-bottom: 2px solid transparent; transition: border-color .15s ease;
+  }
+  .nav ul a:hover{ border-bottom-color: var(--teal-deep); }
+
+  .burger{
+    display:none; width:44px; height:44px; align-items:center; justify-content:center;
+    background:none; border:1px solid var(--rule); cursor:pointer; padding:0; color:inherit;
+  }
+  .burger span{ display:block; width:18px; height:2px; background:currentColor; position:relative; }
+  .burger span::before,.burger span::after{
+    content:''; position:absolute; left:0; width:18px; height:2px; background:currentColor;
+    transition: transform .2s ease, top .2s ease;
+  }
+  .burger span::before{ top:-6px; } .burger span::after{ top:6px; }
+  .burger[aria-expanded="true"] span{ background:transparent; }
+  .burger[aria-expanded="true"] span::before{ top:0; transform:rotate(45deg); }
+  .burger[aria-expanded="true"] span::after{ top:0; transform:rotate(-45deg); }
+
+  @media (max-width: 900px){
+    .burger{ display:flex; }
+    .nav ul{
+      position:absolute; top:100%; left:0; right:0; display:none;
+      flex-direction:column; gap:0; background: var(--cream);
+      border-bottom:1px solid var(--rule);
+    }
+    .nav ul.open{ display:flex; }
+    .nav ul li{ border-top:1px solid var(--rule); }
+    .nav ul a{ display:block; padding:16px var(--pad); font-size:14px; border:none; }
+  }
+
+  /* ---------------- Opening statement ---------------- */
+  /* padding-BLOCK, not the padding shorthand: these elements also carry .wrap,
+     and the shorthand would reset its padding-inline to 0, jamming all the
+     content against the screen edge on mobile. */
+  .opening{ padding-block: clamp(56px, 11vw, 150px) clamp(40px, 7vw, 88px); }
+  .opening h1{
+    font-size: clamp(44px, 9.2vw, 148px);
+    max-width: 15ch;
+    margin-bottom: clamp(24px, 3.5vw, 48px);
+  }
+  .opening h1 em{
+    font-style: italic; color: var(--teal-deep);
+    font-variation-settings: 'SOFT' 60, 'WONK' 1;
+  }
+  .opening-grid{
+    display:grid; grid-template-columns: 1fr; gap: clamp(24px, 4vw, 56px);
+    border-top: 1px solid var(--rule); padding-top: clamp(20px, 2.5vw, 32px);
+  }
+  @media (min-width: 860px){
+    .opening-grid{ grid-template-columns: 1.15fr 1fr; align-items:start; }
+  }
+  .opening-grid p{ font-size: clamp(16px, 1.35vw, 21px); max-width: 46ch; }
+  .opening-grid p:first-child::first-line{ font-weight:600; }
+
+  /* Specimen data strip */
+  .datastrip{
+    display:grid; gap: 1px; background: var(--rule);
+    border-block: 1px solid var(--rule);
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 720px){ .datastrip{ grid-template-columns: repeat(4, 1fr); } }
+  .datastrip div{ background: var(--cream); padding: clamp(16px,2vw,26px) clamp(14px,1.6vw,22px); }
+  .datastrip .n{
+    font-family: var(--f-display); font-size: clamp(28px, 3.6vw, 52px);
+    line-height:1; margin-bottom:8px; font-variation-settings:'SOFT' 20,'WONK' 1;
+  }
+  .datastrip .label{ color: var(--teal-deep); }
+
+  /* ---------------- Chapters ---------------- */
+  .chapter{ padding-block: clamp(56px, 9vw, 128px); }   /* see note on .opening */
+  .chapter-head{
+    display:flex; align-items:baseline; gap: clamp(14px,2vw,28px);
+    margin-bottom: clamp(22px, 3vw, 40px); flex-wrap:wrap;
+    padding-bottom: clamp(14px,1.8vw,24px);
+    border-bottom: 1px solid var(--rule);
+  }
+  /* On the dark and teal bands the ink rule disappears; these give it back at
+     the right weight for each ground. */
+  .band--ink .chapter-head{ border-bottom-color: rgba(250,248,243,.24); }
+  .band--teal .chapter-head{ border-bottom-color: rgba(15,26,22,.24); }
+  /* Get in touch opens straight onto .partner-list, which draws its own rule
+     across the top of its first row. Two rules a hair apart read as a mistake,
+     so where a self-ruled list follows, the head gives up its own and keeps
+     only the spacing. Written with :has() rather than pinned to #contact so it
+     holds wherever the pattern recurs; a browser without :has() simply keeps
+     the rule, which is the state this shipped in before. */
+  .chapter:has(> .partner-list) .chapter-head{ border-bottom:none; padding-bottom:0; }
+  /* The section marker is the page's main signpost, so it is set at display
+     size rather than as a caption. Uppercase and mono to match the page title
+     in the hero above it — the two now read as the same voice at two scales.
+     Tracking comes down as the size goes up: .16em is right at 11px and far too
+     loose at 40px. */
+  .chapter-num{
+    font-family: var(--f-mono); font-weight:700;
+    font-size: clamp(22px, 3.1vw, 42px);
+    letter-spacing:.04em; text-transform: uppercase; line-height:1;
+  }
+  .chapter h2{ font-size: clamp(30px, 5.4vw, 76px); max-width: 18ch; }
+
+  /* Colour-blocked panels — the "bold" device */
+  .band{ padding: clamp(56px, 9vw, 128px) 0; }
+  .band--ink{ background: var(--ink); color: var(--cream); }
+  .band--ink .chapter-num,
+  .band--ink .label{ color: var(--yellow); }
+  .band--teal{ background: var(--teal); }
+  .band--yellow{ background: var(--yellow); }
+  .band--peach{ background: var(--peach); }
+
+  /* Research: asymmetric, offset rows rather than three equal cards */
+  .angle{
+    display:grid; grid-template-columns: 1fr; gap: clamp(12px,2vw,32px);
+    padding: clamp(24px,3.4vw,44px) 0; border-top: 1px solid var(--rule);
+    align-items:start;
+  }
+  .band--ink .angle{ border-top-color: rgba(250,248,243,.22); }
+  @media (min-width: 880px){
+    .angle{ grid-template-columns: 90px 1.1fr 1.3fr; gap: clamp(20px,3vw,48px); }
+  }
+  .angle h3{ font-size: clamp(21px, 2.5vw, 34px); }
+  .angle p{ margin:0; opacity:.86; max-width: 52ch; }
+  .angle .idx{ font-family: var(--f-mono); font-size:12px; letter-spacing:.14em; opacity:.6; }
+
+  /* ---------------- The Collection ---------------- */
+  .collection-layout{ display:grid; grid-template-columns:1fr; gap: clamp(24px,3vw,48px); }
+  @media (min-width: 1000px){
+    .collection-layout{ grid-template-columns: 1fr 1.05fr; align-items:start; }
+  }
+  #viewerCard{
+    position: relative; background: var(--ink); aspect-ratio: 1 / 1;
+    border: 1px solid var(--rule); overflow:hidden;
+  }
+  @media (min-width:1000px){ #viewerCard{ position:sticky; top: 110px; } }
+  #viewer{ position:absolute; inset:0; }
+  #viewer canvas{ background-color: transparent !important; }  /* NGL re-stamps black inline; see Concept 1 notes */
+  .viewer-meta{
+    position:absolute; left:0; right:0; bottom:0; z-index:3;
+    padding: clamp(14px,2vw,22px);
+    background: linear-gradient(to top, rgba(15,26,22,.92), rgba(15,26,22,0));
+    color: var(--cream);
+  }
+  .viewer-meta .pid{
+    font-family: var(--f-mono); font-size: clamp(20px,2.4vw,32px); font-weight:700;
+    color: var(--yellow); letter-spacing:.02em;
+  }
+  .viewer-meta .desc{ font-size: clamp(13px,1.1vw,16px); opacity:.9; margin-top:4px; }
+  .viewer-loading{
+    position:absolute; inset:0; display:grid; place-items:center; z-index:2;
+    color: rgba(250,248,243,.5); font-family: var(--f-mono); font-size:12px;
+    letter-spacing:.14em; text-transform:uppercase;
+  }
+
+  .cat-list{ border-top:1px solid var(--rule); }
+  .cat-item{
+    display:grid; grid-template-columns: auto 1fr auto; gap: clamp(10px,1.6vw,20px);
+    align-items:center; width:100%; text-align:left;
+    padding: clamp(12px,1.5vw,17px) 4px;
+    background:none; border:none; border-bottom:1px solid var(--rule);
+    font: inherit; color: inherit; cursor:pointer;
+    transition: background .14s ease, padding-left .14s ease;
+  }
+  .cat-item:hover{ background: rgba(15,26,22,.045); padding-left: 12px; }
+  .cat-item[aria-current="true"]{ background: var(--teal); padding-left: 12px; }
+  .cat-item .pid{ font-family: var(--f-mono); font-weight:700; font-size: clamp(12px,1.05vw,15px); }
+  .cat-item .nm{ font-size: clamp(13px,1.1vw,16px); }
+  .cat-item .nm em{ font-style: italic; opacity:.75; }
+  .cat-item .yr{ font-family: var(--f-mono); font-size:12px; opacity:.55; }
+  .cat-item[aria-current="true"] .yr{ opacity:.85; }
+
+  /* ---------------- People ---------------- */
+  .people{
+    display:grid; gap: clamp(16px,2.2vw,30px);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  }
+  /* These sit ON the teal band, so the first tile must not also be teal or it
+     vanishes into the background. Cream reads as the "primary" card anyway. */
+  .person .shot{
+    aspect-ratio: 3/4; background: var(--cream); display:grid; place-items:center;
+    margin-bottom:14px; overflow:hidden;
+  }
+  .person:nth-child(2) .shot{ background: var(--yellow); }
+  .person:nth-child(3) .shot{ background: var(--peach); }
+  .person:nth-child(4) .shot{ background: var(--lavender); }
+  .person:nth-child(4) .shot{ background: transparent; border:2px dashed rgba(15,26,22,.4); }
+  .person .shot svg{ width:52%; height:auto; }
+  .person h3{ font-size: clamp(17px,1.6vw,23px); margin-bottom:3px; }
+  .person .role{ font-family: var(--f-mono); font-size:11px; letter-spacing:.11em;
+    text-transform:uppercase; opacity:.62; }
+
+  /* ---------------- Publications ---------------- */
+  .pub{
+    display:grid; grid-template-columns: 1fr; gap:6px;
+    padding: clamp(16px,2vw,26px) 0; border-top:1px solid rgba(250,248,243,.2);
+  }
+  @media (min-width: 820px){ .pub{ grid-template-columns: 74px 1fr 132px; gap: clamp(16px,2.4vw,36px); align-items:baseline; } }
+  .pub .yr{ font-family: var(--f-mono); font-size:12px; color: var(--yellow); letter-spacing:.1em; }
+  .pub .ttl{ font-size: clamp(15px,1.35vw,20px); line-height:1.35; }
+  .pub .ven{ font-family: var(--f-mono); font-size:11px; opacity:.62; letter-spacing:.06em; }
+  .pub--feat .ttl{ font-family: var(--f-display); font-size: clamp(20px,2.3vw,32px); line-height:1.12; }
+  .pub-flag{
+    display:inline-block; font-family: var(--f-mono); font-size:10px; letter-spacing:.12em;
+    text-transform:uppercase; background: var(--yellow); color: var(--ink);
+    padding:3px 8px; margin-top:10px;
+  }
+
+  /* ---------------- CTA ---------------- */
+  .cta h2{ font-size: clamp(32px, 6.4vw, 92px); max-width: 16ch; margin-bottom: clamp(20px,3vw,36px); }
+  .btn{
+    display:inline-block; font-family: var(--f-mono); font-size:13px; letter-spacing:.1em;
+    text-transform:uppercase; text-decoration:none; padding: 16px 30px;
+    background: var(--ink); color: var(--cream); border:2px solid var(--ink);
+    transition: background .15s ease, color .15s ease;
+  }
+  .btn:hover{ background: transparent; color: var(--ink); }
+  .cta-rows{ margin-top: clamp(28px,4vw,52px); border-top:1px solid rgba(15,26,22,.25); }
+  .cta-row{
+    display:grid; grid-template-columns:1fr; gap:4px;
+    padding: clamp(14px,1.8vw,22px) 0; border-bottom:1px solid rgba(15,26,22,.25);
+  }
+  @media (min-width:760px){ .cta-row{ grid-template-columns: 200px 1fr; gap:24px; align-items:baseline; } }
+  .cta-row .k{ font-family:var(--f-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; }
+
+  footer{ background: var(--ink); color: var(--cream); padding: clamp(40px,6vw,80px) 0 clamp(28px,4vw,48px); }
+  .foot{ display:grid; gap:24px; grid-template-columns:1fr; }
+  @media (min-width:800px){ .foot{ grid-template-columns: 1.4fr 1fr 1fr; } }
+  .foot a{ text-decoration:none; opacity:.78; }
+  .foot a:hover{ opacity:1; text-decoration:underline; }
+  .foot .label{ color: var(--yellow); margin-bottom:12px; display:block; }
+  .foot ul{ list-style:none; margin:0; padding:0; display:grid; gap:8px; font-size:14px; }
+  .foot-note{
+    margin-top: clamp(28px,4vw,56px); padding-top:20px;
+    border-top:1px solid rgba(250,248,243,.18); font-size:12px; opacity:.55;
+    display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  }
+
+  /* Placeholder slot for the Bath logo — real asset is on Bath's SharePoint and
+     external use needs sign-off from design@bath.ac.uk, so nothing is shipped. */
+  .logo-slot{
+    border:1px dashed rgba(250,248,243,.35); padding:14px 18px;
+    font-family:var(--f-mono); font-size:10px; letter-spacing:.1em;
+    text-transform:uppercase; opacity:.5; display:inline-block;
+  }
+
+  .reveal{ opacity:0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:.01ms !important; transition-duration:.01ms !important; }
+    .reveal{ opacity:1; transform:none; }
+  }
+
+/* ============================================================
+   Shared page furniture added for the multi-page structure
+   ============================================================ */
+
+.opening-eyebrow{ color: var(--teal-deep); display:block; margin-bottom: clamp(20px,3vw,40px); }
+.opening-sub{ opacity:.75; }
+
+.nav-cta{
+  font-family: var(--f-mono); font-size:12px; text-transform:uppercase;
+  letter-spacing:.1em; text-decoration:none;
+  background: var(--ink); color: var(--cream); padding: 11px 20px;
+  white-space: nowrap;
+}
+.nav-cta:hover{ background: var(--teal-deep); }
+.nav ul .nav-cta-mobile{ display:none; }
+@media (max-width: 900px){
+  .nav > .nav-cta{ display:none; }
+  .nav ul .nav-cta-mobile{
+    display:block; background: var(--ink); color: var(--cream);
+    margin: 12px var(--pad) 18px; text-align:center;
+  }
+}
+
+.band-h2{ font-size: clamp(30px,5.4vw,72px); max-width:20ch; margin-bottom: clamp(20px,3vw,36px); }
+.band-lead{ max-width:56ch; margin-bottom: clamp(28px,4vw,52px); opacity:.85; }
+
+/* ---- Card 2 · story of the research ---- */
+.story-grid{ display:grid; grid-template-columns:1fr; gap: clamp(28px,4vw,64px); }
+@media (min-width: 900px){ .story-grid{ grid-template-columns: 1.5fr 1fr; } }
+.story-lead{ font-size: clamp(17px,1.5vw,23px); }
+.story-grid p{ opacity:.88; max-width:56ch; }
+.story-lead{ opacity:1; }
+
+.btn-yellow{ background: var(--yellow); color: var(--ink); border-color: var(--yellow); margin-top: 10px; }
+.btn-yellow:hover{ background: transparent; color: var(--yellow); }
+
+.funding-note{ border:1px solid rgba(250,248,243,.28); padding: clamp(18px,2.4vw,28px); align-self:start; }
+.funding-note .label{ color: var(--yellow); display:block; margin-bottom:14px; }
+.funding-body p{ font-size:15px; opacity:.9; }
+.funding-detail{ font-size:13px; opacity:.55; margin-bottom:0; }
+
+/* ---- Card 3 · partnerships network ---- */
+.network-wrap{ margin-bottom: clamp(28px,4vw,52px); }
+.network{ width:100%; height:auto; display:block; }
+.net-bonds line{ stroke: rgba(15,26,22,.42); stroke-width:1.5; }
+.net-nodes circle{ fill: var(--cream); stroke: var(--ink); stroke-width:1.5; }
+.net-nodes .node-core{ fill: var(--ink); stroke:none; }
+.net-labels text{
+  font-family: var(--f-mono); font-size:13px; fill: var(--ink);
+  text-anchor: middle; letter-spacing:.04em;
+}
+.net-labels .core-label{ fill: var(--yellow); font-size:15px; font-weight:700; }
+/* The diagram is decorative and unreadable at phone width — the list carries it. */
+@media (max-width: 760px){ .network-wrap{ display:none; } }
+
+.partner-list{ list-style:none; margin:0; padding:0; border-top:1px solid rgba(15,26,22,.25); }
+.partner-list li{
+  display:grid; grid-template-columns:1fr; gap:2px;
+  padding: clamp(13px,1.7vw,19px) 0; border-bottom:1px solid rgba(15,26,22,.25);
+}
+@media (min-width: 780px){
+  .partner-list li{ grid-template-columns: 300px 1fr; gap:24px; align-items:baseline; }
+}
+.partner-list .p-name{ font-weight:600; }
+.partner-list .p-note{ opacity:.75; font-size:15px; }
+
+/* ---- Card 4 · news ----
+   Two registers on one page. The newest post is a LEAD — photo beside text at
+   reading size; everything older drops into the card grid beneath it. The split
+   exists because the page opens its life with a single post on it, and one card
+   in a four-column auto-fit grid either strands itself in a corner or stretches
+   to 1440px with a headline floating in the middle of it. A lead reads as a
+   decision; a lone stretched card reads as a page that failed to load. */
+.news-lead{ margin-bottom: clamp(30px,4.5vw,56px); }
+/* The lead draws its own 2px rule across the top, so the chapter head's
+   hairline 40px above it reads as a mistake — the same fault, and the same
+   fix, as the contact list further up this file. */
+.wrap:has(> .news-lead) .chapter-head{ border-bottom:none; padding-bottom:0; }
+.news-lead-item{
+  display:grid; gap: clamp(18px,3vw,44px);
+  border-top:2px solid var(--ink); padding-top: clamp(16px,2vw,26px);
+}
+/* 3:2 rather than the 4:3 the cards use. A lead photo runs the full height of
+   a two-column row, and at 4:3 it stood 640px tall against three lines of copy
+   — the picture stopped being the illustration and became the page. */
+.news-lead-shot{
+  aspect-ratio: 3/2; overflow:hidden; background: rgba(15,26,22,.12);
+}
+.news-lead-text .news-date{ margin-bottom: clamp(10px,1.4vw,16px); }
+.news-lead-text h2{
+  font-size: clamp(26px,3.4vw,46px); max-width:18ch;
+  margin-bottom: clamp(10px,1.4vw,18px);
+}
+.news-lead-text p{ max-width:54ch; margin:0 0 .8em; opacity:.85; }
+.news-lead-text p:last-child{ margin-bottom:0; }
+@media (min-width: 820px){
+  /* Photo first in the source and on the left, so the reading order a screen
+     reader gets matches the visual one. */
+  .news-lead-item{ grid-template-columns: minmax(0,1.05fr) minmax(0,1fr); align-items:start; }
+  .news-lead-item > .news-lead-text:only-child{ grid-column: 1 / -1; }
+}
+/* A lead with no photo would otherwise sit in one half of the grid with an
+   empty half beside it. */
+.news-lead-item:not(:has(.news-lead-shot)) .news-lead-text h2{ max-width:22ch; }
+
+.news-grid{
+  display:grid; gap: clamp(18px,2.4vw,32px);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+}
+.news-grid:not(:empty){ margin-bottom: clamp(28px,4vw,48px); }
+.news-item{ border-top:2px solid var(--ink); padding-top: 16px; }
+.news-date{
+  font-family: var(--f-mono); font-size:11px; letter-spacing:.12em;
+  text-transform:uppercase; opacity:.6; display:block; margin-bottom:10px;
+}
+.news-item h3{ font-size: clamp(19px,1.9vw,26px); margin-bottom:8px; }
+.news-item p{ font-size:15px; opacity:.8; margin:0 0 .7em; }
+.news-item p:last-child{ margin-bottom:0; }
+/* The thumbnail sits above the rule's text, not above the rule itself. */
+.news-item .thumb{ margin-top:2px; }
+.news-empty{ max-width:52ch; opacity:.8; margin:0; }
+
+/* ---- Footer ---- */
+.foot-blurb{ opacity:.78; max-width:36ch; font-size:14px; }
+
+/* ---- Generic page header for inner pages ---- */
+.page-head{ padding-block: clamp(44px,7vw,96px) clamp(28px,4vw,56px); }
+.page-head h1{ font-size: clamp(36px,6.4vw,96px); max-width:16ch; margin-bottom: clamp(16px,2vw,26px); }
+.page-head p{ max-width:58ch; font-size: clamp(16px,1.3vw,20px); opacity:.8; }
+.page-head .label{ color: var(--teal-deep); display:block; margin-bottom: clamp(16px,2.4vw,28px); }
+
+/* Inner-page additions */
+.chapter-num--teal{ color: var(--teal-deep); }
+.label--yellow{ color: var(--yellow); }
+.pub-more{ margin-top: clamp(24px,3vw,40px); }
+.person .bio{ font-size:14px; opacity:.8; margin-top:8px; }
+.person .role a{ text-decoration:underline; }
+.band--yellow .cta-rows{ margin-top:0; }
+.partner-list a{ text-decoration:underline; }
+
+/* ============================================================
+   Photography
+   Reference behaviour (Yeşilbaş / Tamir): photos as punctuation, not
+   wallpaper — one full-bleed band for place, then contained images inside
+   card modules. Every image gets an explicit aspect-ratio box so the page
+   doesn't jump as they load, and srcset so phones never fetch the 1600w.
+   ============================================================ */
+
+.ph{ display:block; width:100%; height:100%; object-fit:cover; }
+
+/* Full-bleed band — breaks out of .wrap to the viewport edges */
+.photo-band{
+  /* figure carries a UA default margin of 1em 40px — without resetting it the
+     full-bleed band sits 40px right of the viewport and overflows horizontally. */
+  margin:0;
+  position:relative; width:100%;
+  aspect-ratio: 16/7; overflow:hidden; background: var(--ink);
+}
+@media (max-width: 700px){ .photo-band{ aspect-ratio: 4/3; } }
+.photo-band figcaption{
+  position:absolute; left:0; bottom:0; z-index:2;
+  padding: clamp(14px,2.4vw,26px) var(--pad);
+  color: var(--cream);
+  background: linear-gradient(to top, rgba(15,26,22,.85), rgba(15,26,22,0));
+  width:100%;
+}
+.photo-band figcaption span{
+  font-family: var(--f-mono); font-size: clamp(10px,.85vw,12px);
+  letter-spacing:.14em; text-transform:uppercase; opacity:.85;
+}
+
+/* Contained figure inside a card module */
+.photo-figure{ margin:0; }
+.photo-figure .frame{ overflow:hidden; background: rgba(15,26,22,.2); }
+.photo-figure figcaption{
+  font-family: var(--f-mono); font-size:11px; letter-spacing:.1em;
+  text-transform:uppercase; opacity:.6; margin-top:10px;
+}
+.ar-portrait .frame{ aspect-ratio: 3/4; }
+.ar-landscape .frame{ aspect-ratio: 4/3; }
+.ar-square .frame{ aspect-ratio: 1/1; }
+
+/* Story card: text + one portrait image */
+@media (min-width: 900px){
+  .story-grid--photo{ grid-template-columns: 1.35fr .85fr; align-items:start; }
+}
+
+/* Partnerships supporting image */
+.partner-photo{ margin: 0 0 clamp(26px,3.5vw,44px); }
+.partner-photo .frame{ aspect-ratio: 16/9; overflow:hidden; }
+
+/* News thumbnails */
+.news-item .thumb{ aspect-ratio: 4/3; overflow:hidden; margin-bottom:14px; background: rgba(15,26,22,.12); }
+
+/* "In the lab" strip — deliberately uneven, contact-sheet feel */
+.strip{
+  display:grid; gap: clamp(8px,1.2vw,16px);
+  grid-template-columns: repeat(2, 1fr);
+}
+@media (min-width: 820px){
+  .strip{ grid-template-columns: repeat(4, 1fr); grid-auto-rows: clamp(120px,13vw,200px); }
+  .strip .s1{ grid-column: span 2; grid-row: span 2; }
+  .strip .s2{ grid-column: span 1; grid-row: span 1; }
+  .strip .s3{ grid-column: span 1; grid-row: span 2; }
+  .strip .s4{ grid-column: span 1; grid-row: span 1; }
+  .strip .s5{ grid-column: span 2; grid-row: span 1; }
+}
+.strip figure{ margin:0; overflow:hidden; background: rgba(15,26,22,.12); }
+@media (max-width: 819px){ .strip figure{ aspect-ratio: 1/1; } }
+.strip img{ width:100%; height:100%; object-fit:cover; display:block;
+  transition: transform .5s ease; }
+.strip figure:hover img{ transform: scale(1.04); }
+
+/* Bath logo in the footer. Uses the official white-on-dark SVG, which suits the
+   ink footer directly — no recolouring needed. */
+.uob-logo{ margin-top:16px; height:auto; width:clamp(140px,14vw,180px); opacity:.9; }
+
+/* ============================================================
+   Funding rows (research page). Sits on --teal (#47A284): ink is 5.74:1
+   and the secondary tone #172E26 is 4.65:1, so both clear WCAG AA. Do not
+   swap these for opacity values — ink at 0.8 drops to 4.26 and fails.
+   ============================================================ */
+.fund-intro{ font-size: clamp(15px,1.2vw,17px); max-width:48ch; margin:0 0 clamp(22px,3vw,34px); color:#172E26; }
+
+.fund-list{ list-style:none; margin:0; padding:0; }
+.fund-list li{
+  display:grid; grid-template-columns:1fr; gap:4px;
+  padding: clamp(14px,1.9vw,22px) 0;
+  border-top:1px solid rgba(15,26,22,.28);
+}
+.fund-list li:last-child{ border-bottom:1px solid rgba(15,26,22,.28); }
+@media (min-width: 720px){
+  .fund-list li{ grid-template-columns: 1fr auto; gap:36px; align-items:baseline; }
+  .fund-list .f-note{ text-align:right; max-width:38ch; }
+}
+.fund-list .f-name{ font-weight:600; font-size: clamp(15px,1.2vw,17px); }
+.fund-list .f-note{ font-size: clamp(13px,1.05vw,15px); color:#172E26; }
+.fund-list .is-tbc .f-name, .fund-list .is-tbc .f-note{ color:#1F3B31; }
+
+.fund-foot{ font-size:13px; color:#172E26; margin:20px 0 0; }
+
+/* ============================================================
+   CONCEPT 2 — SPLASH (index.html only, scoped to body.splash)
+   A single non-scrolling screen: crystallisation drops behind, brand
+   block left, four routes right.
+
+   Colour (18 Aug 2026, second pass): the splash was briefly given its own
+   teal-led palette and ended up looking like a different website to the four
+   pages it leads into. It now runs the SAME language as those page heroes —
+   full-bleed photograph, dark ink scrim, uppercase mono in cream, yellow as
+   the single accent — so the splash reads as the first of five pages rather
+   than a cover bolted on the front.
+   ============================================================ */
+
+body.splash{
+  /* Headline size lives in a variable because the card stack is offset by a
+     fraction of it (see .splash-nav) — the two have to track together as the
+     headline scales, or the alignment only holds at one viewport width.
+
+     The min() against vh matters: this is a fixed-height composition, so on a
+     wide-but-short window (a 1280x720 laptop, a docked browser) type sized on
+     width alone overflows a screen that cannot scroll. */
+  --h1: clamp(28px, min(6.1vw, 9vh), 82px);
+
+  /* 100dvh, not 100vh — on mobile vh includes the collapsing URL bar. */
+  height: 100dvh;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  background: var(--ink);   /* dark, so any gap behind the photo is not a flash of cream */
+  color: var(--cream);
+}
+
+/* ---- Background photograph ----
+   Crystallisation drops (sitting drops under oil) — Cat's own technique.
+   Shown at its own colour, not duotoned: the four page heroes all run natural
+   photographs under an ink scrim, and this is the same treatment. */
+.splash-bg{ position: fixed; inset: 0; z-index: 0; }
+.splash-bg img{ width:100%; height:100%; object-fit: cover; display:block; }
+/* Scrim, matched to .pg-hero-bg::after so the splash and the page heroes sit
+   at the same depth. Three layers: a top wash so the knocked-out logo and the
+   CTA always have a dark ground; a left-weighted wash carrying the copy; and a
+   base tint holding the whole frame down.
+   Contrast is measured against the worst case — a pure-white pixel under the
+   .72 composite — not against the scrim colour alone:
+     cream #FAF8F3      6.9:1
+     yellow #F0DFA8     5.7:1
+     cream at .88       6.1:1
+   The drops therefore still read on the right, where nothing is set over them. */
+.splash-bg::after{
+  content:''; position:absolute; inset:0;
+  background:
+    linear-gradient(to bottom, rgba(15,26,22,.62) 0%, rgba(15,26,22,.18) 22%,
+                               rgba(15,26,22,0) 38%),
+    linear-gradient(96deg,     rgba(15,26,22,.80) 0%, rgba(15,26,22,.72) 52%,
+                               rgba(15,26,22,.34) 78%, rgba(15,26,22,.20) 100%),
+    linear-gradient(rgba(15,26,22,.28), rgba(15,26,22,.28));
+}
+
+/* ---- Header: no rule, logo large ---- */
+body.splash header{
+  position: static; background: transparent; border-bottom: none; backdrop-filter: none;
+}
+.splash-head{
+  position: relative; z-index: 2;
+  width:100%; max-width: var(--maxw); margin-inline: auto;
+  display:flex; align-items:center; justify-content:space-between; gap:20px;
+  padding: clamp(18px, min(2.6vw,3vh), 34px) var(--pad) 0;
+}
+/* Knocked out to white, exactly as .pg-head does over the page-hero photos —
+   the artwork is dark teal and would otherwise sink into the scrim. */
+.splash-logo{
+  height: clamp(78px, min(11vw, 15vh), 168px); width:auto; display:block;
+  /* no CSS filter — logo-stacked-white.png is already a clean white knockout;
+     filtering the proportional-alpha original left it grey and speckled.
+     Rebuild with scripts/make-logo-knockout.py. */
+}
+/* Cream on ink, matching the inner pages' header CTA over a photograph.
+   min-height keeps it a 44px touch target on a phone. */
+.splash-cta{
+  font-family: var(--f-mono); font-size:12px; font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; text-decoration:none; white-space:nowrap;
+  display:inline-flex; align-items:center; min-height:44px;
+  background: var(--cream); color: var(--ink); padding: 0 22px;
+  border: 1px solid var(--cream);
+  transition: background .16s ease, color .16s ease;
+}
+.splash-cta:hover{ background: var(--yellow); border-color: var(--yellow); }
+/* Cream ring: the site-wide focus colour is teal-deep, which disappears
+   against a dark photograph. */
+.splash-cta:focus-visible{ outline: 3px solid var(--cream); outline-offset: 3px; }
+
+/* ---- Body: brand left, routes right ---- */
+.splash-main{
+  position:relative; z-index:2; flex:1; min-height:0;
+  width:100%; max-width: var(--maxw); margin-inline: auto;
+  display:grid; grid-template-columns: 1fr; align-content:center;
+  gap: clamp(22px,2.6vw,48px);
+  padding: clamp(16px,2.4vw,40px) var(--pad) clamp(24px,3vw,48px);
+}
+@media (min-width: 940px){
+  /* The two columns are centred on each other rather than top-aligned. The
+     copy block is inherently shorter than four cards, so hanging both from a
+     shared top edge left the text riding high with dead space beneath it while
+     the cards ran on past the bottom of it. Centring reads as one composition.
+     (An earlier version pinned the card stack to the headline's first baseline;
+     that only looks right if the two columns are close in height, which they
+     are not.) */
+  .splash-main{ grid-template-columns: 1.1fr .9fr; align-items:center; }
+}
+
+/* ---- The brand block ----
+   Uppercase mono in cream — the same voice as RESEARCH / MEET THE LAB / NEWS /
+   OPPORTUNITIES on the pages this leads into, and the treatment Cat picked out
+   in the first place. */
+.splash-title{
+  font-family: var(--f-mono); font-weight:700;
+  font-size: var(--h1);
+  line-height: 1.04; letter-spacing:-.01em;
+  text-transform: uppercase; color: var(--cream);
+  margin-bottom: clamp(16px,2vw,28px);
+}
+/* A fixed two-line lockup rather than whatever the measure happens to produce
+   — at some widths the natural break orphaned "Lab". No markup or wording
+   change: the break comes from CSS. */
+.splash-title strong{ display:block; font-weight:700; }
+
+/* The one thing you actually read — a clear step up from the signature line
+   under it, so the eye lands here first. */
+.splash-sub{
+  font-size: clamp(15px, 1.5vw, 21px); line-height: 1.55;
+  max-width: 44ch; color: rgba(250,248,243,.88);
+  margin-bottom: clamp(18px,2.2vw,30px);
+}
+.splash-sub em{ font-style: italic; }
+
+/* The signature line, in the yellow the page heroes use for their 01-04 —
+   the one accent colour on the page, and the same one the cards carry. */
+.splash-meta{
+  display:block; font-family: var(--f-mono); font-weight:700;
+  font-size: clamp(10px,.8vw,11.5px); letter-spacing:.16em;
+  text-transform: uppercase; color: var(--yellow);
+}
+
+/* ---- The four routes ----
+   Ink panels over the photograph with yellow left rules, so they read as the
+   same family as the numbered nav on the inner pages. */
+.splash-nav{ display:grid; gap: clamp(9px,1.05vw,14px); align-content:center; }
+.splash-card{
+  position: relative; overflow: hidden; isolation: isolate;
+  display:grid; grid-template-columns: auto 1fr; column-gap: clamp(12px,1.4vw,20px);
+  align-items:baseline; text-decoration:none; color: var(--cream);
+  /* The vertical padding carries a vh term for the same reason --h1 does: the
+     page cannot scroll, and four cards sized on width alone run off the bottom
+     of a short window before the max-height fallback takes over. */
+  padding: clamp(13px, min(1.9vw, 3.4vh), 27px) clamp(15px,1.7vw,24px);
+  background: rgba(15,26,22,.58);
+  backdrop-filter: blur(3px);
+  border: 1px solid rgba(250,248,243,.20);
+  border-left: 4px solid var(--yellow);
+  transition: background .16s ease, border-color .16s ease, transform .16s ease;
+}
+.splash-card:hover,
+.splash-card:focus-visible{
+  background: rgba(15,26,22,.68);
+  border-color: rgba(250,248,243,.34); border-left-color: var(--yellow);
+  transform: translateX(4px);
+}
+.splash-card:focus-visible{ outline: 3px solid var(--cream); outline-offset: 3px; }
+.splash-card .n{
+  font-family: var(--f-mono); font-size:11px; font-weight:700; letter-spacing:.12em;
+  color: var(--yellow);
+}
+.splash-card .t{
+  font-family: var(--f-mono); font-weight:700;
+  font-size: clamp(14px,1.4vw,19px);
+  text-transform: uppercase;
+  /* caps in a mono face need opening up or they read as a solid block */
+  letter-spacing:.09em;
+}
+.splash-card .d{
+  grid-column: 2; font-size: clamp(12px,1.02vw,14px);
+  color: rgba(250,248,243,.80); margin-top:3px;
+  transition: color .16s ease;
+}
+.splash-card:hover .d,
+.splash-card:focus-visible .d{ color: var(--cream); }
+
+/* ---- Short and small screens ----
+   Locking a phone to 100dvh would clip the four routes off the bottom, which is
+   worse than a short scroll. Below 940px the splash becomes a normal page. */
+/* 660px, not 620: with the taller cards the fixed-height composition needs
+   about 450px of clear space below the header, and a 630px window leaves only
+   ~9px of margin. Anything shorter than 660 scrolls instead, which is always
+   better than silently clipping the fourth route off the bottom. */
+@media (max-width: 939px), (max-height: 660px){
+  body.splash{ height:auto; min-height:100dvh; overflow:auto; }
+  .splash-bg{ position:fixed; }
+  /* A portrait phone crops the 3:2 photograph to a narrow vertical slice;
+     shifting it right of centre keeps the large foreground drops in frame. */
+  .splash-bg img{ object-position: 58% center; }
+  .splash-main{ align-content:start; padding-top: clamp(24px,5vw,48px); }
+  .splash-nav{ margin-top:0; }
+  /* Stacked, the copy runs the full width, so the left-weighted wash no longer
+     matches where the type is. An even scrim keeps every line on the same
+     ground it was measured against. */
+  .splash-bg::after{
+    background: linear-gradient(rgba(15,26,22,.74), rgba(15,26,22,.74));
+  }
+}
+@media (prefers-reduced-motion: reduce){
+  .splash-card{ transition:none; }
+  .splash-card:hover{ transform:none; }
+  .splash-cta{ transition:none; }
+}
+
+/* ---- Hover: a diagonal edge sweeps right-to-left, uncovering a photograph ----
+   NB the class is .card-shot, not .reveal — .reveal is already taken by the
+   scroll-in animation (opacity:0 until nav.js adds .in), and reusing it here
+   left the layer permanently invisible.
+   The wash is now INK rather than cream: the cards are dark, and a cream wash
+   would have flipped the panel to light mid-animation and dropped the cream
+   type on it to roughly 1.2:1. Heaviest on the left under the type, opening up
+   on the right where the diagonal enters and there is nothing to read.
+   clip-path animates because both states use a four-point polygon. */
+.splash-card > .n,
+.splash-card > .t,
+.splash-card > .d{ position: relative; z-index: 2; }
+
+.splash-card .card-shot{
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background-image:
+    linear-gradient(100deg, rgba(15,26,22,.93) 0%, rgba(15,26,22,.88) 46%,
+                            rgba(15,26,22,.62) 76%, rgba(15,26,22,.46) 100%),
+    var(--shot);
+  background-size: cover;
+  background-position: var(--shot-pos, center);
+  /* rest: parked just off the right edge, already slanted */
+  clip-path: polygon(100% 0, 100% 0, 125% 100%, 125% 100%);
+  transition: clip-path .55s cubic-bezier(.22,.68,.24,1);
+}
+.splash-card:hover .card-shot,
+.splash-card:focus-visible .card-shot{
+  clip-path: polygon(-28% 0, 100% 0, 100% 100%, 0% 100%);
+}
+@media (prefers-reduced-motion: reduce){
+  .splash-card .card-shot{ transition: opacity .2s ease; clip-path: none; opacity: 0; }
+  .splash-card:hover .card-shot,
+  .splash-card:focus-visible .card-shot{ opacity: 1; }
+}
+
+/* ============================================================
+   CONCEPT 2 — INNER PAGE SHELL
+   Each of the four pages opens with a full-bleed photograph carrying the
+   page name, then you scroll into the content. The header sits ON the
+   photograph (no band, no rule) and only gains a background once you
+   scroll past the hero.
+   ============================================================ */
+
+/* ---- Header ------------------------------------------------------------
+   The route list repeats the splash's language — numbered, uppercase, mono —
+   so someone landing here from a search engine sees the same structure the
+   splash sets up, and the current page is marked. */
+.pg-head{
+  position: fixed; top:0; left:0; right:0; z-index: 60;
+  display:flex; align-items:center; gap: clamp(16px,2.4vw,40px);
+  padding: clamp(12px,1.6vw,22px) var(--pad);
+  background: transparent;
+  transition: background .25s ease, box-shadow .25s ease, padding .25s ease;
+}
+.pg-head.is-stuck{
+  background: rgba(250,248,243,.94);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 1px 0 rgba(15,26,22,.12);
+  padding-block: clamp(8px,1vw,13px);
+}
+.pg-logo{ display:block; line-height:0; flex:0 0 auto; }
+.pg-logo img{ height: clamp(42px,4.4vw,62px); width:auto; display:block; transition: height .25s ease; }
+.pg-head.is-stuck .pg-logo img{ height: clamp(36px,3.4vw,48px); }
+
+.pg-nav{ display:flex; gap: clamp(12px,1.9vw,30px); margin-left:auto; }
+.pg-nav a{
+  display:flex; align-items:baseline; gap:6px; text-decoration:none; color: var(--ink);
+  font-family: var(--f-mono); font-weight:700; font-size: clamp(10.5px,.92vw,12.5px);
+  text-transform: uppercase; letter-spacing:.09em; white-space:nowrap;
+  padding-bottom:3px; border-bottom:2px solid transparent;
+}
+.pg-nav a .i{ font-weight:400; color: var(--teal-deep); font-size:.86em; }
+.pg-nav a:hover{ border-bottom-color: var(--teal-deep); }
+.pg-nav a[aria-current="page"]{ border-bottom-color: var(--teal-deep); color: var(--teal-deep); }
+
+.pg-cta{
+  flex:0 0 auto; font-family: var(--f-mono); font-size:11.5px; letter-spacing:.1em;
+  text-transform:uppercase; text-decoration:none; white-space:nowrap;
+  background: var(--ink); color: var(--cream); padding: 11px 20px;
+}
+.pg-cta:hover{ background: var(--teal-deep); }
+
+.pg-burger{
+  display:none; width:44px; height:44px; margin-left:auto;
+  align-items:center; justify-content:center;
+  background:none; border:1px solid rgba(15,26,22,.3); cursor:pointer; padding:0; color:var(--ink);
+}
+.pg-burger span{ display:block; width:18px; height:2px; background:currentColor; position:relative; }
+.pg-burger span::before,.pg-burger span::after{
+  content:''; position:absolute; left:0; width:18px; height:2px; background:currentColor;
+  transition: transform .2s ease, top .2s ease;
+}
+.pg-burger span::before{ top:-6px; } .pg-burger span::after{ top:6px; }
+.pg-burger[aria-expanded="true"] span{ background:transparent; }
+.pg-burger[aria-expanded="true"] span::before{ top:0; transform:rotate(45deg); }
+.pg-burger[aria-expanded="true"] span::after{ top:0; transform:rotate(-45deg); }
+
+@media (max-width: 900px){
+  .pg-burger{ display:flex; }
+  .pg-head > .pg-cta{ display:none; }
+  .pg-nav{
+    position:absolute; top:100%; left:0; right:0; display:none;
+    flex-direction:column; gap:0;
+    background: rgba(250,248,243,.98); backdrop-filter: blur(10px);
+    box-shadow: 0 12px 30px rgba(15,26,22,.10);
+  }
+  .pg-nav.open{ display:flex; }
+  .pg-nav a{
+    padding: 15px var(--pad); border-bottom:1px solid rgba(15,26,22,.10);
+    font-size:13px; border-left:3px solid transparent;
+  }
+  .pg-nav a[aria-current="page"]{ border-left-color: var(--yellow); border-bottom-color: rgba(15,26,22,.10); }
+}
+
+/* ---- Hero --------------------------------------------------------------- */
+.pg-hero{
+  position:relative; min-height: clamp(400px, 62vh, 660px);
+  display:flex; align-items:flex-end;
+  overflow:hidden; background: var(--ink);
+}
+.pg-hero-bg{ position:absolute; inset:0; z-index:0; }
+.pg-hero-bg img{ width:100%; height:100%; object-fit:cover; display:block; }
+/* Crop modifier. A centred cover crop takes the middle band of the photograph,
+   which on the group shot cuts the tops of everyone's heads — the faces sit in
+   the upper third of the frame, not the middle. 26% holds them fully in view at
+   every hero height from the 400px floor to the 660px cap, and drops them into
+   the upper third so the centred page title crosses bodies rather than faces. */
+.pg-hero-bg img.pos-upper{ object-position: center 26%; }
+/* Two scrims: one at the top so the header reads over any photo, one at the
+   bottom so the page name always has a dark ground regardless of the image. */
+.pg-hero-bg::after{
+  content:''; position:absolute; inset:0;
+  background:
+    linear-gradient(to bottom, rgba(15,26,22,.42) 0%, rgba(15,26,22,0) 26%),
+    linear-gradient(to top,    rgba(15,26,22,.80) 0%, rgba(15,26,22,.30) 46%, rgba(15,26,22,.06) 78%);
+}
+.pg-hero-inner{
+  position:relative; z-index:1; width:100%;
+  max-width: var(--maxw); margin:0 auto;
+  padding: 0 var(--pad) clamp(28px,4vw,60px);
+  color: var(--cream);
+}
+.pg-num{
+  display:block; font-family: var(--f-mono); font-weight:700;
+  font-size: clamp(11px,1vw,13px); letter-spacing:.16em;
+  color: var(--yellow); margin-bottom: clamp(8px,1.2vw,14px);
+}
+.pg-hero h1{
+  font-family: var(--f-mono); font-weight:700;
+  font-size: clamp(30px, 6.6vw, 92px); line-height:1.02; letter-spacing:-.01em;
+  text-transform: uppercase; color: var(--cream);
+  margin:0 0 clamp(10px,1.4vw,18px);
+  font-variation-settings: normal;
+}
+.pg-lede{
+  font-size: clamp(15px,1.3vw,19px); max-width: 54ch; margin:0;
+  color: rgba(250,248,243,.88);
+}
+.pg-scroll{
+  position:absolute; right: var(--pad); bottom: clamp(28px,4vw,60px); z-index:1;
+  font-family: var(--f-mono); font-size:10.5px; letter-spacing:.16em;
+  text-transform:uppercase; color: rgba(250,248,243,.7);
+  display:flex; align-items:center; gap:9px;
+}
+.pg-scroll::after{
+  content:''; width:1px; height:36px; background: rgba(250,248,243,.5);
+  animation: scrollcue 1.9s ease-in-out infinite;
+  transform-origin: top;
+}
+@keyframes scrollcue{ 0%,100%{ transform: scaleY(.4); opacity:.4; } 50%{ transform: scaleY(1); opacity:1; } }
+@media (max-width: 700px){ .pg-scroll{ display:none; } }
+@media (prefers-reduced-motion: reduce){ .pg-scroll::after{ animation:none; transform:none; } }
+
+/* Centred variant — the page name sits in the middle of the photograph rather
+   than anchored bottom-left. Used where there is no lede beside it.
+   padding-block, NOT the padding shorthand: the base rule sets the inline
+   padding from --pad and losing it jams the title against the screen edge. */
+.pg-hero--centre{ align-items: center; text-align: center; }
+.pg-hero--centre .pg-hero-inner{ padding-block: clamp(56px,8vw,110px); }
+.pg-hero--centre h1{ margin-bottom: 0; }
+
+/* Bottom-weighted scrims can't carry type in the middle of the frame, so this
+   variant adds a centre-weighted one. Sized so the title clears AA even against
+   pure-white pixels: cream 6.2:1, the yellow 01 5.2:1, both measured against a
+   worst-case white photo with only this radial over it. The stacked gradients
+   composite darker still, so the real figures are better than that. */
+.pg-hero--centre .pg-hero-bg::after{
+  background:
+    linear-gradient(to bottom, rgba(15,26,22,.58) 0%, rgba(15,26,22,.16) 18%, rgba(15,26,22,0) 30%),
+    radial-gradient(ellipse 72% 58% at 50% 50%,
+                    rgba(15,26,22,.70) 0%, rgba(15,26,22,.42) 55%, rgba(15,26,22,.18) 100%),
+    linear-gradient(to top,    rgba(15,26,22,.80) 0%, rgba(15,26,22,.30) 46%, rgba(15,26,22,.06) 78%);
+}
+
+/* Content starts straight after the hero; the old page-head padding is gone. */
+/* padding-top/-bottom, never the padding shorthand: this element also carries
+   .wrap, and the shorthand would wipe out its padding-inline and jam the card
+   against the screen edge on a phone. */
+.pg-body{ padding-top: clamp(32px,4.6vw,72px); padding-bottom: clamp(40px,5.4vw,86px); }
+
+
+/* People photos have not arrived yet — empty tiles rather than smiley stand-ins. */
+.person .shot:empty{ background: rgba(15,26,22,.10); border:1px dashed rgba(15,26,22,.22); }
+
+
+/* Over the hero the header sits on a darkened photograph, so its contents have to
+   be light; once it sticks it is on cream and reverts. The logo is dark artwork,
+   so it is knocked out to white rather than recoloured. */
+.pg-head:not(.is-stuck) .pg-nav a{ color: rgba(250,248,243,.92); }
+.pg-head:not(.is-stuck) .pg-nav a .i{ color: var(--yellow); }
+.pg-head:not(.is-stuck) .pg-nav a:hover{ border-bottom-color: var(--yellow); }
+.pg-head:not(.is-stuck) .pg-nav a[aria-current="page"]{
+  color: #fff; border-bottom-color: var(--yellow);
+}
+.pg-head:not(.is-stuck) .pg-logo img{ filter: brightness(0) invert(1); }
+.pg-head:not(.is-stuck) .pg-cta{ background: var(--cream); color: var(--ink); }
+.pg-head:not(.is-stuck) .pg-cta:hover{ background: var(--yellow); }
+.pg-head:not(.is-stuck) .pg-burger{ color:#fff; border-color: rgba(250,248,243,.55); }
+/* the mobile drawer is always on cream, so its links stay dark */
+@media (max-width: 900px){
+  .pg-head:not(.is-stuck) .pg-nav.open a{ color: var(--ink); }
+  .pg-head:not(.is-stuck) .pg-nav.open a .i{ color: var(--teal-deep); }
+}
+/* a stronger top scrim now that the header relies on it */
+.pg-hero-bg::after{
+  background:
+    linear-gradient(to bottom, rgba(15,26,22,.58) 0%, rgba(15,26,22,.16) 18%, rgba(15,26,22,0) 30%),
+    linear-gradient(to top,    rgba(15,26,22,.80) 0%, rgba(15,26,22,.30) 46%, rgba(15,26,22,.06) 78%);
+}
+
+
+/* ============================================================
+   LAB MEMBERS CARD  (people.html)
+   Layout follows the Collins Lab (MIT) members page: a ring-bordered
+   circular portrait beside the name, with the role and contact set
+   smaller and italic underneath. Rendered in this site's own palette
+   and type, and in full colour — the reference runs its portraits in
+   black and white, which was tried here and rejected.
+   ============================================================ */
+
+/* White, so it lifts off the cream page. The hairline does the separating —
+   the shadow is only there to stop the white looking like a hole in the page.
+   No .wrap on this element, so the padding shorthand is safe here. */
+.lab-card{
+  background: #fff;
+  border: 1px solid rgba(15,26,22,.10);
+  padding: clamp(28px,4vw,64px) clamp(22px,3.4vw,56px);
+  box-shadow: 0 1px 2px rgba(15,26,22,.04), 0 14px 34px rgba(15,26,22,.05);
+}
+
+/* teal-deep, not the brand teal: #47A284 is 3.1:1 on white, which only passes
+   at large-bold sizes and would fail the moment these headings got smaller.
+   teal-deep is 7.4:1 and safe at any size. */
+.lab-h{
+  font-family: var(--f-mono); font-weight:700;
+  font-size: clamp(14px,1.45vw,19px); letter-spacing:.09em;
+  text-transform: uppercase; color: var(--teal-deep);
+  margin: 0 0 clamp(18px,2.2vw,28px);
+}
+
+.lab-list{ list-style:none; margin:0; padding:0; display:grid; gap: clamp(20px,2.4vw,30px); }
+/* auto-fit, not a fixed column count: with three people a hard 2-column
+   track would orphan the third on its own row. This gives 3 across on a
+   wide card, 2 at mid width and 1 on a phone, with no orphan at any of
+   them. minmax floor is set by the avatar plus a readable name. */
+.lab-list--grid{
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  column-gap: clamp(24px,3vw,48px);
+}
+
+.lab-rule{
+  border:0; border-top:1px solid rgba(15,26,22,.12);
+  margin: clamp(28px,3.6vw,48px) 0;
+}
+
+.member{
+  display:grid; grid-template-columns: auto 1fr;
+  gap: clamp(16px,1.9vw,28px); align-items:center;
+}
+.who{ display:grid; gap:3px; min-width:0; }
+
+.avatar{
+  width: clamp(112px,13vw,168px); aspect-ratio:1; border-radius:50%;
+  border: 4px solid var(--teal); overflow:hidden; flex:none;
+  background: rgba(15,26,22,.06);
+}
+/* The director's portrait is the anchor of the page, so it runs larger — the
+   same relationship the reference layout uses. */
+.member--lead .avatar{ width: clamp(150px,19vw,240px); }
+.avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+/* No photograph yet. A dashed ring reads as "awaiting content" rather than as a
+   broken image or a stand-in face. */
+.avatar:empty{ border-style:dashed; border-color: rgba(71,162,132,.6); }
+
+.nm{ font-size: clamp(16px,1.3vw,19px); color: var(--ink); line-height:1.3; }
+.member--lead .nm{ font-size: clamp(19px,1.7vw,24px); }
+/* rgba ink at .72 measures 7.8:1 on white — the reference sets these grey, but
+   its own grey would not clear AA here. */
+.rl{
+  font-style: italic; font-size: clamp(12.5px,1.02vw,14.5px); line-height:1.45;
+  color: rgba(15,26,22,.72); overflow-wrap:anywhere;
+}
+
+/* ---- Partnerships and collaborators (bottom of the lab card) -------------- */
+.lab-group--partners{ }
+
+/* ============================================================
+   Partner marquee (people page)
+   The scrolling banner from concept 1, brought over and given more presence:
+   it bleeds to the card's edges as a tinted band rather than sitting as a
+   quiet row inside the text column, and the marks run roughly half again the
+   height they did in the static strip.
+
+   The marks are already normalised to one ink tone in assets/brand/norm, so
+   the only job here is optical sizing — set by HEIGHT, not width, because
+   their intrinsic widths run from 81px to 1237px and matching on width would
+   leave the Bristol wordmark tiny beside the Oxford crest.
+   ============================================================ */
+.marquee{
+  position:relative; overflow:hidden;
+  /* Bleed to the card edges. Must track .lab-card's horizontal padding. */
+  margin-inline: calc(-1 * clamp(22px,3.4vw,56px));
+  margin-bottom: calc(-1 * clamp(28px,4vw,64px));
+  padding-block: clamp(20px,2.8vw,36px);
+  background: rgba(71,162,132,.09);
+  border-top: 1px solid rgba(15,26,22,.10);
+  /* Fade the ends so marks enter and leave rather than being cut off. */
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+/* 9 marks rather than concept 1's 6, so the duration scales with them —
+   concept 1 runs ~7s per mark and this keeps that pace, rather than whipping a
+   longer track past at the same 42s. */
+.marquee-track{ display:flex; width:max-content; animation: marquee 63s linear infinite; }
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track{ animation-play-state: paused; }
+
+.marquee-set{
+  display:flex; align-items:center; list-style:none; margin:0; padding:0;
+  gap: clamp(40px, 6vw, 88px);
+  padding-inline: clamp(20px, 3vw, 44px);
+}
+/* Translating by exactly one set width makes the loop seamless. */
+@keyframes marquee{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
+
+.lg{ display:flex; align-items:center; justify-content:center; flex:0 0 auto; }
+.lg img{ display:block; width:auto; opacity:.8; transition: opacity .2s ease; }
+.marquee:hover .lg img{ opacity:1; }
+
+/* Optical sizing, not mechanical — a square crest needs more height than a
+   wide wordmark to read at the same visual weight. --block covers the two
+   marks that stack an emblem over small print (PAL, INEOS): they need to run
+   taller still, because it is the small print, not the overall mark, that has
+   to match everything else's x-height. */
+.lg--wide  img{ height: clamp(42px, 4.8vw, 64px); }
+.lg--crest img{ height: clamp(66px, 7.6vw, 100px); }
+.lg--block img{ height: clamp(64px, 7.1vw, 94px); }
+.lg--small img{ height: clamp(34px, 3.9vw, 52px); }
+
+@media (prefers-reduced-motion: reduce){
+  /* Don't animate; let it scroll by hand instead so nothing is unreachable. */
+  .marquee{ overflow-x:auto; }
+  .marquee-track{ animation:none; }
+  .marquee-set:last-child{ display:none; }
+}
+
+/* Retained on purpose though nothing uses it right now: the collaborator names
+   were pulled out 19 Aug and this section is being reworked. Delete if that
+   rework doesn't bring a name list back. */
+.collab-list{
+  list-style:none; margin:0; padding:0;
+  display:flex; flex-wrap:wrap; gap: 4px clamp(12px,1.4vw,20px);
+  font-size: clamp(13px,1.05vw,15px); color: rgba(15,26,22,.72);
+}
+/* Separator on the ::before of every item after the first, so it never trails
+   at the end of a wrapped row. */
+.collab-list li + li::before{
+  content:'·'; margin-right: clamp(12px,1.4vw,20px); color: rgba(15,26,22,.34);
+}
+
+
+/* ============================================================
+   RESEARCH PAGE  (concept 2)
+   Scope -> Publications -> Structures -> Funding
+   ============================================================ */
+
+/* ---- 01 Scope: alternating text/photo rows ------------------------------- */
+.scope-row{
+  display:grid; grid-template-columns:1fr; gap: clamp(24px,3.4vw,56px);
+  align-items:center;
+  padding-block: clamp(28px,4vw,56px);
+}
+.scope-row + .scope-row{ border-top: 1px solid var(--rule); }
+@media (min-width: 900px){
+  .scope-row{ grid-template-columns: 1.1fr .9fr; gap: clamp(40px,5vw,88px); }
+  /* Reversed by ORDER, not by direction:reverse or a reordered source. The
+     markup keeps text-then-photo in both rows, so the reading order a screen
+     reader gets is the same in each, and only the visual order flips. */
+  .scope-row--flip .scope-text{ order: 2; }
+  .scope-row--flip .scope-shot{ order: 1; }
+}
+.scope-text h2{
+  font-size: clamp(26px,3.4vw,44px); margin-bottom: clamp(14px,1.8vw,24px);
+}
+.scope-text p{ max-width: 58ch; opacity:.88; }
+.scope-text p:last-child{ margin-bottom:0; }
+.scope-shot{ margin:0; }
+/* Both source photographs are portrait (800x1067). Left at their natural shape
+   they run ~730-890px tall against ~470px of copy, which drives the row height
+   off the picture and leaves a well of dead space beside the text. Fixing the
+   frame to 4:3 and cropping to fill keeps the two rows the same shape as each
+   other and keeps the picture shorter than the words it belongs to. */
+.scope-shot .frame{ aspect-ratio: 4/3; }
+.scope-shot .frame img{ width:100%; height:100%; object-fit:cover; }
+
+/* ---- 02 Publications ----------------------------------------------------- */
+/* A bounded, scrolling well rather than 25 rows down the page: the list is the
+   long tail of the section, not the point of it. resize:vertical lets anyone
+   who wants the whole thing at once drag it open. */
+.pub-scroll{
+  max-height: clamp(480px, 68vh, 780px);
+  overflow-y: auto; resize: vertical;
+  /* No top border: the chapter head already draws a rule directly above this,
+     and the two sat a few pixels apart reading as a double line. The bottom one
+     stays so the scrolling well still reads as bounded. */
+  border-bottom: 1px solid rgba(250,248,243,.22);
+  padding-right: clamp(6px,1vw,14px);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(250,248,243,.34) transparent;
+}
+.pub-scroll::-webkit-scrollbar{ width:10px; }
+.pub-scroll::-webkit-scrollbar-thumb{
+  background: rgba(250,248,243,.28); border-radius:10px;
+}
+
+.pub-year{
+  position: sticky; top:0; z-index:2;
+  font-family: var(--f-mono); font-weight:700; font-size: clamp(11px,1vw,13px);
+  letter-spacing:.16em; color: var(--yellow);
+  padding: clamp(14px,1.8vw,22px) 0 8px;
+  /* Opaque, not translucent: rows scroll underneath this and a see-through
+     marker would let the text of a title show through it. */
+  background: var(--ink);
+}
+
+.pub-row{
+  display:grid; grid-template-columns: 1fr auto;
+  gap: clamp(16px,2.2vw,34px); align-items:center;
+  /* Tight: 25 rows in a bounded well, so every extra pixel of padding costs a
+     visible row. */
+  padding: clamp(11px,1.3vw,16px) 0;
+  border-top: 1px solid rgba(250,248,243,.14);
+  text-decoration:none; color: var(--cream);
+  transition: background .15s ease;
+}
+.pub-row:hover,
+.pub-row:focus-visible{ background: rgba(250,248,243,.06); }
+.pub-row:focus-visible{ outline:3px solid var(--yellow); outline-offset:-3px; }
+.pub-text{ display:grid; gap:5px; min-width:0; }
+.pub-title{ font-size: clamp(15px,1.35vw,19px); line-height:1.35; }
+.pub-meta{
+  font-family: var(--f-mono); font-size: clamp(10.5px,.88vw,12px);
+  letter-spacing:.05em; color: rgba(250,248,243,.72);
+}
+
+/* The first page of the paper. Cropped to the title block rather than shown
+   whole — a full page at this size is an illegible grey rectangle, whereas the
+   masthead and title are recognisable even at 96px wide. */
+.pub-shot{
+  width: clamp(62px,6.2vw,84px); aspect-ratio: 1/1.15;
+  overflow:hidden; flex:none; background: rgba(250,248,243,.08);
+  border:1px solid rgba(250,248,243,.18);
+}
+.pub-shot img{
+  width:100%; height:auto; display:block;
+  transition: transform .3s ease;
+}
+.pub-row:hover .pub-shot img{ transform: scale(1.04); }
+/* No PDF available — a plain tile, never a broken-image icon. */
+.pub-shot--none{
+  display:grid; place-items:center; padding:6px; text-align:center;
+  background: rgba(250,248,243,.04);
+}
+.pub-shot--none span{
+  font-family: var(--f-mono); font-size:9px; line-height:1.3; letter-spacing:.06em;
+  text-transform:uppercase; color: rgba(250,248,243,.5);
+}
+.pub-kind{
+  justify-self:start; margin-top:3px;
+  font-family: var(--f-mono); font-size:9.5px; letter-spacing:.12em;
+  text-transform:uppercase; color: var(--ink);
+  background: var(--yellow); padding:2px 7px;
+}
+.pub-fallback{ padding: 22px 0; color: rgba(250,248,243,.8); }
+.pub-fallback a{ color: var(--yellow); }
+.pub-more{ margin: clamp(20px,2.6vw,32px) 0 0; }
+
+/* ---- 03 Structures ------------------------------------------------------- */
+.viewer-meta{
+  display:flex; align-items:flex-end; justify-content:space-between;
+  gap:16px; flex-wrap:wrap;
+}
+.pdb-link{
+  font-family: var(--f-mono); font-size:11.5px; font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; white-space:nowrap;
+  color: var(--teal-deep); text-decoration:none;
+  border-bottom:2px solid var(--teal-deep); padding-bottom:2px;
+}
+.pdb-link:hover{ color: var(--ink); border-bottom-color: var(--ink); }
+
+/* ---- 04 Funding ---------------------------------------------------------- */
+/* --teal is a 5.7:1 ground for --ink, so this band takes dark type. */
+.fund-thanks{
+  font-size: clamp(17px,1.7vw,24px); max-width: 46ch; color: var(--ink);
+  margin-bottom: clamp(28px,3.6vw,48px);
+}
+.fund-logos{
+  list-style:none; margin:0 0 clamp(22px,2.8vw,34px); padding:0;
+  display:flex; flex-wrap:wrap; align-items:center; gap: clamp(26px,3.6vw,60px);
+}
+/* Each mark sits on its own white plate rather than straight on the teal.
+   Funder guidelines generally require the logo be reproduced unaltered and on a
+   clear background, and the MRC mark is navy with cyan detail, which fights the
+   band. White also gives both marks the same ground, so a full-colour logo and
+   a monochrome one can sit side by side without looking mismatched. */
+.fund-logos li{
+  background:#fff; padding: clamp(12px,1.4vw,18px) clamp(16px,1.8vw,24px);
+  display:flex; align-items:center;
+}
+.fund-logos img{ height: clamp(30px,3.2vw,46px); width:auto; }
+.fund-foot{
+  font-family: var(--f-mono); font-size: clamp(10.5px,.9vw,12px);
+  letter-spacing:.08em; color: rgba(15,26,22,.72); margin:0;
+}
+
+
+/* ---- Scope slideshows ----------------------------------------------------
+   Three images per block, crossfading in place. The frame already carries the
+   4:3 aspect-ratio, so it holds its own height and nothing on the page moves as
+   the images swap — which is why the slides are absolutely positioned rather
+   than stacked in flow. */
+.slideshow{ position:relative; }
+.slideshow .slide{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  opacity:0; transition: opacity .9s ease;
+}
+.slideshow .slide.is-on{ opacity:1; }
+/* The first slide also sits in flow, so the frame has something to size from
+   before the script runs and so the picture is still there with JS off. */
+.slideshow .slide:first-child{ position:relative; }
+
+.slide-dots{
+  display:flex; gap:8px; margin-top: clamp(10px,1.2vw,14px);
+}
+.slide-dot{
+  width:34px; height:14px; padding:0; border:0; cursor:pointer;
+  background: rgba(15,26,22,.18);
+  transition: background .18s ease;
+  /* The visible bar is 3px, but the button stays 14px tall so it is not a
+     hairline-sized tap target on a phone. */
+  background-clip: content-box; border-block: 5px solid transparent;
+}
+.slide-dot:hover{ background: rgba(15,26,22,.4); }
+.slide-dot[aria-current="true"]{ background: var(--teal-deep); }
+.slide-dot:focus-visible{ outline:2px solid var(--teal-deep); outline-offset:3px; }
+
+@media (prefers-reduced-motion: reduce){
+  .slideshow .slide{ transition:none; }
+}

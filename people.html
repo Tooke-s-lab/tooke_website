@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>People — The Tooke Lab</title>
+<meta name="description" content="The people of the Tooke Lab, University of Bath.">
+<meta name="color-scheme" content="light">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="pg-head">
+  <a class="pg-logo" href="index.html" aria-label="The Tooke Lab — home">
+    <img src="assets/logo.png" alt="The Tooke Lab">
+  </a>
+  <nav class="pg-nav" id="pgNav" aria-label="Sections">
+      <a href="research.html"><span class="i">01</span>Research</a>
+      <a href="people.html" aria-current="page"><span class="i">02</span>Meet the lab</a>
+      <a href="news.html"><span class="i">03</span>News</a>
+      <a href="opportunities.html"><span class="i">04</span>Opportunities</a>
+  </nav>
+  <a class="pg-cta" href="opportunities.html#contact">Get in touch</a>
+  <button class="pg-burger" id="pgBurger" aria-expanded="false" aria-controls="pgNav" aria-label="Menu"><span></span></button>
+</header>
+
+<main>
+
+  <section class="pg-hero pg-hero--centre">
+    <div class="pg-hero-bg">
+      <img class="pos-upper" src="assets/photos/hero-people-1920.webp"
+           srcset="assets/photos/hero-people-1200.webp 1200w, assets/photos/hero-people-1920.webp 1920w, assets/photos/hero-people-2028.webp 2028w"
+           sizes="100vw" width="1920" height="1392" fetchpriority="high"
+           alt="The group standing together in a beamline experimental hall.">
+    </div>
+    <div class="pg-hero-inner">
+      <span class="pg-num">02</span>
+      <h1>Meet the lab</h1>
+    </div>
+    <span class="pg-scroll" aria-hidden="true">Scroll</span>
+  </section>
+
+  <div class="wrap pg-body">
+    <section class="lab-card">
+
+      <div class="lab-group">
+        <h2 class="lab-h">Principal investigator</h2>
+        <ul class="lab-list">
+          <li class="member member--lead">
+            <span class="avatar"><img src="assets/photos/person-cat-320.webp" alt="Catherine Tooke" width="320" height="320" loading="lazy" decoding="async"></span>
+            <div class="who">
+              <span class="nm">Dr Catherine Tooke</span>
+              <span class="rl">Lecturer &amp; MRC Research Fellow</span>
+              <span class="rl">Department of Life Sciences &amp; Centre for Evolution</span>
+              <span class="rl">clt81 [at] bath.ac.uk</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <hr class="lab-rule">
+
+      <!-- No category headings here by request — the lab is listed as one
+           group, with each person's role carried on their own entry. -->
+      <ul class="lab-list lab-list--grid">
+          <li class="member">
+            <span class="avatar"><img src="assets/photos/person-harry-320.webp" alt="Harry Morgan" width="320" height="320" loading="lazy" decoding="async"></span>
+            <div class="who">
+              <span class="nm">Dr Harry Morgan</span>
+              <span class="rl">Postdoctoral researcher</span>
+              <span class="rl">hm745 [at] bath.ac.uk</span>
+            </div>
+          </li>
+          <li class="member">
+            <span class="avatar"><img src="assets/photos/person-joe-210.webp" alt="Joe Hoff" width="210" height="210" loading="lazy" decoding="async"></span>
+            <div class="who">
+              <span class="nm">Joe Hoff</span>
+              <span class="rl">PhD student</span>
+              <span class="rl">lr19354 [at] bristol.ac.uk</span>
+            </div>
+          </li>
+          <li class="member">
+            <span class="avatar"><img src="assets/photos/person-xandi-320.webp" alt="Xandi Drysdale" width="320" height="320" loading="lazy" decoding="async"></span>
+            <div class="who">
+              <span class="nm">Xandi Drysdale</span>
+              <span class="rl">Undergraduate student</span>
+              <span class="rl">ad2636 [at] bath.ac.uk</span>
+            </div>
+          </li>
+      </ul>
+
+      <hr class="lab-rule">
+
+      <div class="lab-group lab-group--partners">
+        <h2 class="lab-h">Partnerships and collaborators</h2>
+
+        <!-- Scrolling partner banner, the marquee from concept 1. The track holds
+             the set twice so the loop is seamless; the second copy is aria-hidden
+             so screen readers and search engines meet each partner once. Pauses on
+             hover and on keyboard focus, and does not animate at all under
+             prefers-reduced-motion. -->
+        <div class="marquee" role="group" aria-label="Partner and collaborator organisations">
+          <div class="marquee-track">
+            <ul class="marquee-set">
+              <li class="lg lg--wide"><img src="assets/brand/norm/bath.png" alt="University of Bath" width="198" height="70" loading="lazy" decoding="async"></li>
+              <li class="lg lg--wide"><img src="assets/brand/norm/bristol.svg" alt="University of Bristol" width="740" height="214" loading="lazy" decoding="async"></li>
+              <li class="lg lg--crest"><img src="assets/brand/norm/oxford.svg" alt="University of Oxford" width="81" height="80" loading="lazy" decoding="async"></li>
+              <li class="lg lg--block"><img src="assets/brand/norm/ineos-oxford.png" alt="INEOS Oxford Institute" width="179" height="127" loading="lazy" decoding="async"></li>
+              <li class="lg lg--small"><img src="assets/brand/norm/diamond.png" alt="Diamond Light Source" width="168" height="53" loading="lazy" decoding="async"></li>
+              <li class="lg lg--wide"><img src="assets/brand/norm/ljubljana.svg" alt="University of Ljubljana" width="143" height="54" loading="lazy" decoding="async"></li>
+              <li class="lg lg--wide"><img src="assets/brand/norm/smu.png" alt="Southern Methodist University" width="294" height="97" loading="lazy" decoding="async"></li>
+              <li class="lg lg--wide"><img src="assets/brand/norm/berkeley.png" alt="University of California, Berkeley" width="449" height="110" loading="lazy" decoding="async"></li>
+              <li class="lg lg--block"><img src="assets/brand/norm/pal-xfel.png" alt="Pohang Accelerator Laboratory (PAL-XFEL)" width="228" height="124" loading="lazy" decoding="async"></li>
+            </ul>
+            <ul class="marquee-set" aria-hidden="true">
+              <li class="lg lg--wide"><img src="assets/brand/norm/bath.png" alt="" width="198" height="70" loading="lazy" decoding="async"></li>
+              <li class="lg lg--wide"><img src="assets/brand/norm/bristol.svg" alt="" width="740" height="214" loading="lazy" decoding="async"></li>
+              <li class="lg lg--crest"><img src="assets/brand/norm/oxford.svg" alt="" width="81" height="80" loading="lazy" decoding="async"></li>
+              <li class="lg lg--block"><img src="assets/brand/norm/ineos-oxford.png" alt="" width="179" height="127" loading="lazy" decoding="async"></li>
+              <li class="lg lg--small"><img src="assets/brand/norm/diamond.png" alt="" width="168" height="53" loading="lazy" decoding="async"></li>
+              <li class="lg lg--wide"><img src="assets/brand/norm/ljubljana.svg" alt="" width="143" height="54" loading="lazy" decoding="async"></li>
+              <li class="lg lg--wide"><img src="assets/brand/norm/smu.png" alt="" width="294" height="97" loading="lazy" decoding="async"></li>
+              <li class="lg lg--wide"><img src="assets/brand/norm/berkeley.png" alt="" width="449" height="110" loading="lazy" decoding="async"></li>
+              <li class="lg lg--block"><img src="assets/brand/norm/pal-xfel.png" alt="" width="228" height="124" loading="lazy" decoding="async"></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <span class="label">The Tooke Lab</span>
+        <p class="foot-blurb">
+          Department of Life Sciences &amp; Centre for Evolution,<br>
+          University of Bath, BA2 7AY.
+        </p>
+        <img class="uob-logo" src="assets/brand/uob-logo-inverse.svg"
+             alt="University of Bath" width="180" height="56" loading="lazy">
+      </div>
+      <div>
+        <span class="label">Explore</span>
+        <ul>
+          <li><a href="research.html">Research</a></li>
+          <li><a href="people.html">People</a></li>
+          <li><a href="news.html">News</a></li>
+          <li><a href="opportunities.html">Opportunities</a></li>
+        </ul>
+      </div>
+      <div>
+        <span class="label">Elsewhere</span>
+        <ul>
+          <li><a href="https://researchportal.bath.ac.uk/en/persons/catherine-tooke">Bath research portal</a></li>
+          <li><a href="https://www.rcsb.org/">Protein Data Bank</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-note">
+      <span>© 2026 The Tooke Lab</span>
+      <span>University of Bath</span>
+    </div>
+  </div>
+</footer>
+
+<script src="pagehead.js"></script>
+</body>
+</html>

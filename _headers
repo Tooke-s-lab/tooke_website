@@ -1,0 +1,62 @@
+# Cloudflare Pages response headers.
+# Syntax: a path pattern on its own line, then indented "Name: value" lines.
+# Most specific rule does not win — ALL matching rules apply, so the broad
+# security block below is intentionally separate from the caching rules.
+
+/*
+  # Stops a browser second-guessing a Content-Type. Our .pdb files are served as
+  # something generic; without this a browser is free to sniff and decide they
+  # are HTML, which is the whole shape of a content-injection bug.
+  X-Content-Type-Options: nosniff
+  # The site is never meant to be framed. Clickjacking has no purchase on a
+  # brochure site, but this costs nothing and removes the question.
+  X-Frame-Options: DENY
+  # Send the origin, not the full path, when a visitor clicks out to a journal.
+  Referrer-Policy: strict-origin-when-cross-origin
+  # We ask for none of these. Saying so explicitly means a future embedded
+  # widget cannot quietly start asking.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+
+# Fingerprint-free filenames, so these must revalidate. If style.css were cached
+# for a year, a fix would not reach anyone who had already visited — and the
+# people most likely to have visited are the ones we most want to see the fix.
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+/*.css
+  Cache-Control: public, max-age=0, must-revalidate
+/*.js
+  Cache-Control: public, max-age=0, must-revalidate
+/*.json
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Content-addressed in practice: assets/photos/hero-news-1920.webp only ever
+# holds that one image at that one size, and a new photo is given a new name by
+# the prepare-* scripts. A year-long cache can never serve the wrong thing.
+/assets/photos/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/structures/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/brand/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# These two are the exception, and the reason the rule above is not just
+# /assets/*. Their filenames are derived from a post title and a paper key, so
+# REPLACING an image reuses its name — studio.html hands Cat
+# news-beamtime-at-diamond.webp whether it is the placeholder or her real photo
+# from the trip. Cached immutably, the placeholder would outlive its replacement
+# by a year for exactly the people who had already looked. A day is long enough
+# to be worth having and short enough to self-heal.
+/assets/news/*
+  Cache-Control: public, max-age=86400
+/assets/publications/*
+  Cache-Control: public, max-age=86400
+
+# Logo and favicons, at the assets root. Stable names, hand-curated.
+/assets/logo.png
+  Cache-Control: public, max-age=31536000, immutable
+/assets/favicon.png
+  Cache-Control: public, max-age=31536000, immutable
+/assets/favicon-32.png
+  Cache-Control: public, max-age=31536000, immutable
+/assets/logo-stacked-white.png
+  Cache-Control: public, max-age=31536000, immutable

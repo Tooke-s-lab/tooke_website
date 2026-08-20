@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page not found — The Tooke Lab</title>
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light">
+<!-- Every URL on this page is root-absolute (/assets/…, not assets/…) and that is
+     load-bearing. Cloudflare serves this file for ANY missing path while leaving
+     the address bar alone, so at /news/old-post a relative "assets/logo.png"
+     would be fetched from /news/assets/logo.png. A 404 page with a broken logo
+     and dead navigation is the one page you cannot afford to get wrong. -->
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="pg-head is-stuck">
+  <a class="pg-logo" href="/" aria-label="The Tooke Lab — home">
+    <img src="/assets/logo.png" alt="The Tooke Lab">
+  </a>
+  <nav class="pg-nav" id="pgNav" aria-label="Sections">
+      <a href="/research.html"><span class="i">01</span>Research</a>
+      <a href="/people.html"><span class="i">02</span>Meet the lab</a>
+      <a href="/news.html"><span class="i">03</span>News</a>
+      <a href="/opportunities.html"><span class="i">04</span>Opportunities</a>
+  </nav>
+  <a class="pg-cta" href="/opportunities.html#contact">Get in touch</a>
+  <button class="pg-burger" id="pgBurger" aria-expanded="false" aria-controls="pgNav" aria-label="Menu"><span></span></button>
+</header>
+
+<main>
+
+  <section class="pg-hero pg-hero--centre">
+    <div class="pg-hero-inner">
+      <span class="pg-num">404</span>
+      <h1>No such page</h1>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="cta-rows">
+        <div class="cta-row">
+          <span class="k">Research</span>
+          <span><a href="/research.html">What the lab works on, and the structures behind it.</a></span>
+        </div>
+        <div class="cta-row">
+          <span class="k">Meet the lab</span>
+          <span><a href="/people.html">Who is here.</a></span>
+        </div>
+        <div class="cta-row">
+          <span class="k">News</span>
+          <span><a href="/news.html">What we have been up to lately.</a></span>
+        </div>
+        <div class="cta-row">
+          <span class="k">Opportunities</span>
+          <span><a href="/opportunities.html">PhD, postdoc and collaboration enquiries.</a></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <span class="label">The Tooke Lab</span>
+        <p class="foot-blurb">
+          Department of Life Sciences &amp; Centre for Evolution,<br>
+          University of Bath, BA2 7AY.
+        </p>
+        <img class="uob-logo" src="/assets/brand/uob-logo-inverse.svg"
+             alt="University of Bath" width="180" height="56" loading="lazy">
+      </div>
+      <div>
+        <span class="label">Explore</span>
+        <ul>
+          <li><a href="/research.html">Research</a></li>
+          <li><a href="/people.html">People</a></li>
+          <li><a href="/news.html">News</a></li>
+          <li><a href="/opportunities.html">Opportunities</a></li>
+        </ul>
+      </div>
+      <div>
+        <span class="label">Elsewhere</span>
+        <ul>
+          <li><a href="https://researchportal.bath.ac.uk/en/persons/catherine-tooke">Bath research portal</a></li>
+          <li><a href="https://www.rcsb.org/">Protein Data Bank</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-note">
+      <span>© 2026 The Tooke Lab</span>
+      <span>University of Bath</span>
+    </div>
+  </div>
+</footer>
+
+<script src="/pagehead.js"></script>
+</body>
+</html>

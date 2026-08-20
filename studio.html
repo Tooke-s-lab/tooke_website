@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>News studio — The Tooke Lab</title>
+<meta name="color-scheme" content="light">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- The real site stylesheet. The preview below is built out of the site's own
+     classes, so what it shows is not an approximation — it is the page. -->
+<link rel="stylesheet" href="style.css">
+
+<style>
+/* Studio chrome only. Everything is prefixed .st- so it cannot collide with the
+   site's own classes, which are doing the real work inside the preview. */
+.st-page{ max-width:1320px; margin:0 auto; padding: 28px clamp(18px,4vw,48px) 96px; }
+.st-top{ border-bottom:2px solid var(--ink); padding-bottom:18px; margin-bottom:26px; }
+.st-kicker{ font-family:var(--f-mono); font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; opacity:.6; display:block; margin-bottom:6px; }
+.st-top h1{ font-size: clamp(28px,4vw,48px); margin:0 0 8px; }
+.st-top p{ margin:0; max-width:62ch; opacity:.82; }
+
+.st-steps{ display:grid; gap:14px; margin:0 0 32px; padding:0; list-style:none;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%,210px),1fr)); }
+.st-steps li{ background:var(--yellow); padding:16px 18px; }
+.st-steps b{ font-family:var(--f-mono); font-size:11px; letter-spacing:.12em;
+  text-transform:uppercase; display:block; margin-bottom:6px; }
+.st-steps span{ font-size:15px; }
+
+.st-cols{ display:grid; gap: clamp(24px,3vw,44px); align-items:start; }
+@media (min-width:1000px){ .st-cols{ grid-template-columns: minmax(0,420px) minmax(0,1fr); } }
+
+.st-panel{ border:2px solid var(--ink); padding: clamp(18px,2.2vw,26px); }
+.st-panel + .st-panel{ margin-top:22px; }
+.st-panel h2{ font-size:20px; margin:0 0 4px; }
+.st-panel > p.st-note{ margin:0 0 18px; }
+.st-note{ font-size:14px; opacity:.72; }
+
+.st-field{ margin-bottom:18px; }
+.st-field label{ display:block; font-weight:600; font-size:15px; margin-bottom:2px; }
+.st-field .st-hint{ display:block; font-size:13.5px; opacity:.7; margin-bottom:7px; }
+.st-field input[type=text], .st-field input[type=date], .st-field textarea{
+  width:100%; font-family:var(--f-body); font-size:15px; color:var(--ink);
+  background:#fff; border:1.5px solid rgba(15,26,22,.42); border-radius:0;
+  padding:10px 12px; line-height:1.5;
+}
+.st-field textarea{ min-height:132px; resize:vertical; }
+.st-field input:focus, .st-field textarea:focus{ outline:2px solid var(--teal-deep); outline-offset:1px; }
+.st-count{ font-family:var(--f-mono); font-size:11px; opacity:.55; float:right; font-weight:400; }
+.st-count.over{ opacity:1; color:#8A2B18; font-weight:700; }
+
+.st-drop{ display:block; border:2px dashed rgba(15,26,22,.42); background:#fff;
+  padding:22px; text-align:center; cursor:pointer; }
+.st-drop.over{ border-color:var(--teal-deep); background:rgba(71,162,132,.14); }
+.st-drop b{ display:block; margin-bottom:4px; }
+.st-drop small{ opacity:.7; }
+.st-drop input[type=file]{ display:none; }
+.st-shotinfo{ display:none; margin-top:12px; font-family:var(--f-mono);
+  font-size:11.5px; letter-spacing:.03em; line-height:1.7; }
+.st-shotinfo.on{ display:block; }
+
+.st-btn{ font-family:var(--f-mono); font-size:12px; letter-spacing:.1em;
+  text-transform:uppercase; font-weight:700; border:2px solid var(--ink);
+  background:var(--ink); color:var(--cream); padding:13px 20px; cursor:pointer; }
+.st-btn:hover{ background:var(--teal-deep); border-color:var(--teal-deep); }
+.st-btn[disabled]{ opacity:.32; cursor:not-allowed; background:var(--ink);
+  border-color:var(--ink); }
+.st-btn--ghost{ background:transparent; color:var(--ink); }
+.st-btn--ghost:hover{ background:var(--ink); color:var(--cream); }
+.st-btn--small{ padding:7px 12px; font-size:11px; }
+.st-actions{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+
+.st-msg{ margin-top:14px; font-size:14.5px; padding:11px 14px; display:none; }
+.st-msg.on{ display:block; }
+.st-msg--bad{ background:var(--peach); }
+.st-msg--good{ background:var(--teal); }
+
+.st-preview-label{ font-family:var(--f-mono); font-size:11px; letter-spacing:.12em;
+  text-transform:uppercase; opacity:.6; margin:0 0 10px; }
+.st-preview-frame{ background:var(--yellow); padding: clamp(22px,3vw,44px); }
+
+.st-list{ list-style:none; margin:0; padding:0; }
+.st-list li{ display:flex; gap:14px; align-items:center;
+  padding:12px 0; border-bottom:1px solid var(--rule); }
+.st-list li:last-child{ border-bottom:0; }
+.st-list img{ width:64px; height:48px; object-fit:cover; flex:none;
+  background:rgba(15,26,22,.12); }
+.st-li-body{ flex:1 1 auto; min-width:0; }
+.st-li-title{ font-weight:600; }
+.st-li-date{ font-family:var(--f-mono); font-size:11px; letter-spacing:.1em;
+  text-transform:uppercase; opacity:.6; }
+.st-li-lead{ background:var(--teal); font-family:var(--f-mono); font-size:10px;
+  letter-spacing:.1em; text-transform:uppercase; padding:2px 6px; margin-left:8px;
+  opacity:1; }
+
+.st-out{ background:var(--ink); color:var(--cream); padding:18px;
+  font-family:var(--f-mono); font-size:12px; line-height:1.65; max-height:280px;
+  overflow:auto; white-space:pre-wrap; word-break:break-word; margin:0; }
+.st-final{ background:var(--lavender); padding: clamp(18px,2.2vw,26px); margin-top:22px; }
+.st-final h2{ font-size:20px; margin:0 0 10px; }
+.st-final ol{ margin:0; padding-left:20px; }
+.st-final li{ margin-bottom:8px; }
+.st-final code{ font-family:var(--f-mono); font-size:12.5px;
+  background:rgba(15,26,22,.1); padding:1px 5px; }
+</style>
+</head>
+<body>
+
+<div class="st-page">
+
+  <div class="st-top">
+    <span class="st-kicker">The Tooke Lab &middot; internal tool &middot; not part of the public site</span>
+    <h1>News studio</h1>
+    <p>Write a post for the news page. You do not need to know any code, install
+       anything, or open any other file. Fill this in, check the preview, press the
+       two download buttons, and send what you get to whoever looks after the site.</p>
+  </div>
+
+  <ol class="st-steps">
+    <li><b>Step 1</b><span>Write the post in the form. The preview updates as you type.</span></li>
+    <li><b>Step 2</b><span>Drop in a photo if you have one. It is shrunk for the web automatically.</span></li>
+    <li><b>Step 3</b><span>Press <em>Add this post</em>, then the two download buttons.</span></li>
+    <li><b>Step 4</b><span>Send both downloaded files on. That is the whole job.</span></li>
+  </ol>
+
+  <div class="st-cols">
+
+    <!-- ============ LEFT: the form ============ -->
+    <div>
+      <div class="st-panel">
+        <h2>Your post</h2>
+        <p class="st-note">Nothing is published until the files are sent on, so there
+           is no way to break the website from this page.</p>
+
+        <div class="st-field">
+          <label for="f-date">Date</label>
+          <span class="st-hint">When it happened. Posts are ordered newest first automatically.</span>
+          <input type="date" id="f-date">
+        </div>
+
+        <div class="st-field">
+          <label for="f-title">Headline <span class="st-count" id="c-title"></span></label>
+          <span class="st-hint">Short and plain. &ldquo;Beamtime at Diamond&rdquo;, not
+            &ldquo;Successful data collection campaign&rdquo;.</span>
+          <input type="text" id="f-title" maxlength="90" placeholder="Beamtime at Diamond">
+        </div>
+
+        <div class="st-field">
+          <label for="f-body">The post <span class="st-count" id="c-body"></span></label>
+          <span class="st-hint">Two or three sentences, written the way you would tell
+            someone in the corridor. Leave a blank line between paragraphs if you want two.</span>
+          <textarea id="f-body" placeholder="We spent three days on I24 collecting on&hellip;"></textarea>
+        </div>
+
+        <div class="st-field">
+          <label>Photo <span class="st-note" style="font-weight:400">&mdash; optional</span></label>
+          <span class="st-hint">Drag one in, or click to choose. It is resized and
+            compressed here in the browser, so a huge photo straight off a phone is fine.</span>
+          <label class="st-drop" id="drop">
+            <b>Drop a photo here</b>
+            <small>or click to choose &middot; JPEG or PNG</small>
+            <input type="file" id="f-photo" accept="image/*">
+          </label>
+          <div class="st-shotinfo" id="shotinfo"></div>
+        </div>
+
+        <div class="st-field" id="altwrap" style="display:none">
+          <label for="f-alt">Describe the photo</label>
+          <span class="st-hint">One line, for readers using a screen reader and for
+            anyone whose images fail to load. &ldquo;Four of us in front of the I24
+            experimental hutch.&rdquo;</span>
+          <input type="text" id="f-alt" maxlength="160"
+                 placeholder="Four of us in front of the I24 experimental hutch.">
+        </div>
+
+        <div class="st-actions">
+          <button class="st-btn" id="add">Add this post</button>
+          <button class="st-btn st-btn--ghost st-btn--small" id="clear">Clear the form</button>
+        </div>
+        <div class="st-msg" id="msg"></div>
+      </div>
+
+      <div class="st-panel">
+        <h2>Posts on the site</h2>
+        <p class="st-note" id="listnote"></p>
+        <ul class="st-list" id="list"></ul>
+      </div>
+    </div>
+
+    <!-- ============ RIGHT: preview, output, hand-off ============ -->
+    <div>
+      <p class="st-preview-label">Preview &mdash; this is the news page, at full size</p>
+      <div class="st-preview-frame">
+        <div class="news-lead" id="pvLead"></div>
+        <div class="news-grid" id="pvGrid"></div>
+      </div>
+
+      <div class="st-panel" style="margin-top:22px">
+        <h2>Download</h2>
+        <p class="st-note">Two files. Both are needed &mdash; the first is the words,
+           the second is the picture.</p>
+        <div class="st-actions">
+          <button class="st-btn" id="dl-data">1 &nbsp;Download news-data.js</button>
+          <button class="st-btn" id="dl-photo" disabled>2 &nbsp;Download the photo</button>
+        </div>
+        <p class="st-note" style="margin:16px 0 8px">What the first file will contain:</p>
+        <pre class="st-out" id="out"></pre>
+      </div>
+
+      <div class="st-final">
+        <h2>Then send them on</h2>
+        <ol>
+          <li>Email or message <b>both downloaded files</b> to whoever looks after the
+              site, saying &ldquo;new news post&rdquo;. Nothing else is needed.</li>
+          <li>If you have the website folder yourself: put <code>news-data.js</code>
+              into the site folder, replacing the one already there, and the
+              photo into <code>assets/news/</code>. Then reload the news page.</li>
+        </ol>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- The posts currently on the site. Loaded as a script rather than fetched so
+     that this page works when it is simply double-clicked out of a folder —
+     fetch() is blocked on a file:// origin and would leave the list empty. -->
+<script src="news-data.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  function $(id) { return document.getElementById(id); }
+
+  /* --- state ----------------------------------------------------------- */
+  var posts = (window.__TOOKE_NEWS || []).slice();  // what is on the site now
+  var shot  = null;   // the photo for the post being written
+  // Every photo added this sitting, by filename. Not just the last one: someone
+  // clearing a backlog writes three posts in one go, and holding a single photo
+  // meant the first two previewed as broken images and — worse — could not be
+  // downloaded at all, so they would have reached the site as dead links.
+  var library = {};
+  var MONTHS = ['January','February','March','April','May','June','July',
+                'August','September','October','November','December'];
+
+  /* --- helpers --------------------------------------------------------- */
+  function prettyDate(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || '').trim());
+    if (!m) return '';
+    return Number(m[3]) + ' ' + MONTHS[Number(m[2]) - 1] + ' ' + m[1];
+  }
+
+  function slug(s) {
+    return String(s).toLowerCase()
+      .replace(/['‘’]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 48) || 'post';
+  }
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  function say(text, good) {
+    var m = $('msg');
+    m.textContent = text;
+    m.className = 'st-msg on ' + (good ? 'st-msg--good' : 'st-msg--bad');
+  }
+  function hush() { $('msg').className = 'st-msg'; }
+
+  function bytes(n) {
+    return n < 1048576 ? Math.round(n / 1024) + ' KB' : (n / 1048576).toFixed(1) + ' MB';
+  }
+
+  function photoURL(post) {
+    // A post written in this sitting previews from the blob held in memory;
+    // posts already on the site preview from the file in assets/news/.
+    if (shot && post.photo === shot.name) return shot.url;
+    if (library[post.photo]) return library[post.photo].url;
+    return 'assets/news/' + post.photo;
+  }
+
+  function photoCount() { return Object.keys(library).length + (shot ? 1 : 0); }
+
+  // The button says how many files it is about to hand over, because "two
+  // downloads" and "one download" are the difference between a complete post
+  // and a post with a hole where the picture should be.
+  function syncPhotoButton() {
+    var n = photoCount();
+    var b = $('dl-photo');
+    b.disabled = n === 0;
+    b.innerHTML = '2 &nbsp;Download the photo' + (n > 1 ? 's (' + n + ')' : '');
+  }
+
+  /* --- the draft currently in the form --------------------------------- */
+  function draft() {
+    return {
+      date:  $('f-date').value,
+      title: $('f-title').value.trim(),
+      body:  $('f-body').value.trim(),
+      photo: shot ? shot.name : null,
+      alt:   shot ? $('f-alt').value.trim() : null
+    };
+  }
+  function isBlank(p) { return !p.title && !p.body && !p.photo; }
+
+  function byDateDesc(a, b) { return String(b.date).localeCompare(String(a.date)); }
+
+  /* --- preview, built from the SITE's classes so it cannot lie ---------- */
+  function paragraphs(parent, body, placeholder) {
+    var chunks = String(body || '').split(/\n\s*\n/).filter(function (c) { return c.trim(); });
+    if (!chunks.length && placeholder) chunks = [placeholder];
+    chunks.forEach(function (c) { parent.appendChild(el('p', null, c.trim())); });
+  }
+
+  function photoNode(post, cls) {
+    var box = el('div', cls);
+    var img = el('img', 'ph');
+    img.src = photoURL(post);
+    img.alt = post.alt || '';
+    box.appendChild(img);
+    return box;
+  }
+
+  function renderPreview() {
+    var d = draft();
+    var all = posts.slice();
+    if (!isBlank(d)) all.push(d);
+    all.sort(byDateDesc);
+
+    var lead = $('pvLead'), grid = $('pvGrid');
+    lead.innerHTML = '';
+    grid.innerHTML = '';
+
+    if (!all.length) {
+      lead.appendChild(el('p', 'news-empty',
+        'Nothing yet — write a headline on the left and it will appear here.'));
+      return;
+    }
+
+    var first = all[0];
+    var art = el('article', 'news-lead-item');
+    if (first.photo) art.appendChild(photoNode(first, 'news-lead-shot'));
+    var text = el('div', 'news-lead-text');
+    text.appendChild(el('span', 'news-date', prettyDate(first.date) || 'Pick a date'));
+    text.appendChild(el('h2', null, first.title || 'Your headline'));
+    paragraphs(text, first.body, 'Your two or three sentences will sit here.');
+    art.appendChild(text);
+    lead.appendChild(art);
+
+    all.slice(1).forEach(function (p) {
+      var item = el('article', 'news-item');
+      if (p.photo) item.appendChild(photoNode(p, 'thumb'));
+      item.appendChild(el('span', 'news-date', prettyDate(p.date)));
+      item.appendChild(el('h3', null, p.title));
+      paragraphs(item, p.body, '');
+      grid.appendChild(item);
+    });
+  }
+
+  /* --- the posts already on the site ----------------------------------- */
+  function renderList() {
+    var ul = $('list');
+    ul.innerHTML = '';
+    var sorted = posts.slice().sort(byDateDesc);
+
+    $('listnote').textContent = !sorted.length
+      ? 'There are no posts yet. Yours will be the first.'
+      : sorted.length + ' post' + (sorted.length === 1 ? '' : 's') +
+        '. The newest is the one shown large at the top of the page.';
+
+    sorted.forEach(function (p, i) {
+      var li = document.createElement('li');
+      if (p.photo) {
+        var img = document.createElement('img');
+        img.src = photoURL(p);
+        img.alt = '';
+        li.appendChild(img);
+      }
+      var body = el('div', 'st-li-body');
+      var d = el('div', 'st-li-date', prettyDate(p.date));
+      if (i === 0) d.appendChild(el('span', 'st-li-lead', 'Lead'));
+      body.appendChild(d);
+      body.appendChild(el('div', 'st-li-title', p.title));
+      li.appendChild(body);
+
+      var rm = el('button', 'st-btn st-btn--ghost st-btn--small', 'Remove');
+      rm.addEventListener('click', function () {
+        // Removing here only changes the file about to be downloaded. The live
+        // site keeps the post until that file is actually put in place.
+        if (!window.confirm('Remove "' + p.title + '" from the news page?')) return;
+        posts = posts.filter(function (q) { return q !== p; });
+        if (p.photo && library[p.photo]) {
+          URL.revokeObjectURL(library[p.photo].url);
+          delete library[p.photo];
+        }
+        syncPhotoButton();
+        refresh();
+      });
+      li.appendChild(rm);
+      ul.appendChild(li);
+    });
+  }
+
+  /* --- the file that gets downloaded ------------------------------------ */
+  var HEADER = [
+    '/* ============================================================',
+    '   NEWS POSTS — the whole of the news page lives in this file.',
+    '',
+    '   THIS IS THE ONLY FILE THAT CHANGES WHEN A POST IS ADDED.',
+    '   Nobody needs to touch HTML or CSS to publish news.',
+    '',
+    '   You are not expected to edit this by hand. Open studio.html in a',
+    '   browser (double-click it), write the post in the form, and it hands',
+    '   you a replacement for this file plus a web-ready photo.',
+    '',
+    '   If you ARE editing by hand, the rules are:',
+    '     · newest post FIRST',
+    '     · every " inside your text must be written as \\"',
+    '     · date is YYYY-MM-DD  (the site prints it as "12 August 2026")',
+    '     · photo is a filename inside assets/news/, or null for no photo',
+    '     · alt describes the photo for a reader who cannot see it —',
+    '       it is required whenever there is a photo',
+    '     · keep the commas between } and { — a missing one blanks the page',
+    '   ============================================================ */'
+  ].join('\n');
+
+  function fileText() {
+    var body = posts.slice().sort(byDateDesc).map(function (p) {
+      return '  {\n' + [
+        '    "date": '  + JSON.stringify(p.date),
+        '    "title": ' + JSON.stringify(p.title),
+        '    "body": '  + JSON.stringify(p.body),
+        '    "photo": ' + JSON.stringify(p.photo || null),
+        '    "alt": '   + JSON.stringify(p.alt || null)
+      ].join(',\n') + '\n  }';
+    }).join(',\n');
+    return HEADER + '\nwindow.__TOOKE_NEWS = [\n' + body + '\n];\n';
+  }
+
+  function download(blob, name) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.parentNode.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 6000);
+  }
+
+  function refresh() {
+    renderPreview();
+    renderList();
+    $('out').textContent = fileText();
+
+    var t = $('f-title').value.length, b = $('f-body').value.length;
+    $('c-title').textContent = t ? t + '/90' : '';
+    $('c-body').className = 'st-count' + (b > 420 ? ' over' : '');
+    $('c-body').textContent = b ? (b > 420 ? b + ' — long for a news note' : String(b)) : '';
+  }
+
+  /* --- photo: resized and re-encoded here, in the browser --------------- */
+  var MAXW = 1400;     // wider than the card is ever drawn, on any screen
+  var QUALITY = 0.82;
+
+  function loadBitmap(file) {
+    // imageOrientation honours the EXIF rotation tag phones write, without
+    // which a portrait photo off an iPhone arrives on its side.
+    if (window.createImageBitmap) {
+      try { return createImageBitmap(file, { imageOrientation: 'from-image' }); }
+      catch (e) { /* older browser — fall through to the Image path */ }
+    }
+    return new Promise(function (resolve, reject) {
+      var url = URL.createObjectURL(file);
+      var img = new Image();
+      img.onload = function () { resolve(img); };
+      img.onerror = function () { reject(new Error('decode failed')); };
+      img.src = url;
+    });
+  }
+
+  function handleFile(file) {
+    if (!file) return;
+    hush();
+
+    if (/\.(heic|heif)$/i.test(file.name)) {
+      say('That is an iPhone HEIC photo, which no web browser can open. Either ' +
+          'email the photo to yourself — which converts it to JPEG on the way ' +
+          '— or set Settings › Camera › Formats › Most Compatible ' +
+          'and take it again.');
+      return;
+    }
+    if (!/^image\//.test(file.type)) {
+      say('That does not look like a photo. A JPEG or PNG is what is wanted here.');
+      return;
+    }
+
+    loadBitmap(file).then(function (bmp) {
+      var w = bmp.width || bmp.naturalWidth;
+      var h = bmp.height || bmp.naturalHeight;
+      var scale = Math.min(1, MAXW / w);
+      var cw = Math.round(w * scale), ch = Math.round(h * scale);
+
+      var canvas = document.createElement('canvas');
+      canvas.width = cw;
+      canvas.height = ch;
+      canvas.getContext('2d').drawImage(bmp, 0, 0, cw, ch);
+
+      canvas.toBlob(function (blob) {
+        if (!blob) { say('The photo could not be converted. Try a JPEG.'); return; }
+
+        // Re-encoding an image that is already small and already web-format can
+        // make it BIGGER. If it did, keep the original bytes: the point of this
+        // step is a smaller file, and there is no other reason to touch it.
+        var untouched = scale === 1 && blob.size >= file.size &&
+                        /^image\/(jpeg|webp|png)$/.test(file.type);
+        if (untouched) blob = file;
+
+        // Safari was late to WebP encoding. If it hands back a JPEG instead,
+        // take the JPEG and name the file honestly rather than shipping
+        // something whose extension lies about its contents.
+        var ext = blob.type === 'image/webp' ? '.webp'
+                : blob.type === 'image/png'  ? '.png' : '.jpg';
+
+        var base = 'news-' + slug($('f-title').value || 'post');
+        var used = posts.map(function (p) { return p.photo; })
+                        .concat(Object.keys(library));
+        var name = base + ext, n = 2;
+        while (used.indexOf(name) !== -1) { name = base + '-' + (n++) + ext; }
+
+        if (shot && shot.url) URL.revokeObjectURL(shot.url);
+        shot = { blob: blob, name: name, url: URL.createObjectURL(blob) };
+
+        $('shotinfo').className = 'st-shotinfo on';
+        $('shotinfo').textContent =
+          file.name + '  →  ' + name + '\n' +
+          cw + '×' + ch + ' px  ·  ' + bytes(file.size) + ' → ' + bytes(blob.size);
+        $('altwrap').style.display = '';
+        syncPhotoButton();
+        refresh();
+      }, 'image/webp', QUALITY);
+    })['catch'](function () {
+      say('That photo could not be read. A JPEG or PNG straight off the camera roll works best.');
+    });
+  }
+
+  /* --- wiring ----------------------------------------------------------- */
+  ['f-date', 'f-title', 'f-body', 'f-alt'].forEach(function (id) {
+    $(id).addEventListener('input', function () { hush(); refresh(); });
+  });
+
+  $('f-photo').addEventListener('change', function (e) { handleFile(e.target.files[0]); });
+
+  var drop = $('drop');
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('over'); });
+  });
+  ['dragleave', 'drop'].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('over'); });
+  });
+  drop.addEventListener('drop', function (e) {
+    if (e.dataTransfer && e.dataTransfer.files) handleFile(e.dataTransfer.files[0]);
+  });
+
+  $('add').addEventListener('click', function () {
+    var d = draft();
+    if (!d.date)  return say('Pick a date first — the page is ordered by it.');
+    if (!d.title) return say('A headline is needed.');
+    if (!d.body)  return say('Write a sentence or two for the body of the post.');
+    if (d.photo && !d.alt) {
+      return say('Describe the photo in one line. It is what a blind reader gets ' +
+                 'instead of the picture, and the site should not go out without it.');
+    }
+
+    posts.push(d);
+
+    // The blob is still needed for the download button, so it moves into the
+    // library rather than being cleared with the rest of the form.
+    if (shot) library[shot.name] = shot;
+    shot = null;
+
+    $('f-title').value = '';
+    $('f-body').value = '';
+    $('f-alt').value = '';
+    $('f-photo').value = '';
+    $('altwrap').style.display = 'none';
+    $('shotinfo').className = 'st-shotinfo';
+    syncPhotoButton();
+
+    say('Added. Now press the two download buttons on the right.', true);
+    refresh();
+  });
+
+  $('clear').addEventListener('click', function () {
+    $('f-title').value = '';
+    $('f-body').value = '';
+    $('f-alt').value = '';
+    $('f-photo').value = '';
+    // Only the draft's photo is dropped; anything already attached to an added
+    // post stays in the library and stays downloadable.
+    if (shot && !library[shot.name] && shot.url) URL.revokeObjectURL(shot.url);
+    shot = null;
+    $('altwrap').style.display = 'none';
+    $('shotinfo').className = 'st-shotinfo';
+    syncPhotoButton();
+    hush();
+    refresh();
+  });
+
+  $('dl-data').addEventListener('click', function () {
+    download(new Blob([fileText()], { type: 'text/javascript' }), 'news-data.js');
+  });
+
+  $('dl-photo').addEventListener('click', function () {
+    var all = Object.keys(library).map(function (k) { return library[k]; });
+    if (shot && !library[shot.name]) all.push(shot);
+    // Staggered: fired in a tight loop, Chrome treats the run as one download
+    // and silently drops all but the first.
+    all.forEach(function (p, i) {
+      setTimeout(function () { download(p.blob, p.name); }, i * 700);
+    });
+    if (all.length > 1) {
+      say('Sending ' + all.length + ' photos to your downloads folder. If the browser ' +
+          'asks whether to allow multiple downloads, say yes.', true);
+    }
+  });
+
+  /* --- start ------------------------------------------------------------ */
+  (function init() {
+    var t = new Date();
+    $('f-date').value = t.getFullYear() + '-' +
+      ('0' + (t.getMonth() + 1)).slice(-2) + '-' +
+      ('0' + t.getDate()).slice(-2);
+    syncPhotoButton();
+    refresh();
+  })();
+})();
+</script>
+</body>
+</html>
