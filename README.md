@@ -37,7 +37,7 @@ research.html         research + the PDB structure browser
 people.html           the group
 news.html             news — holds NO post markup; news.js renders it
 opportunities.html    joining the lab
-studio.html           the news composer non-coders use — see below
+404.html              not-found page (root-absolute URLs — see DEPLOY.md)
 
 style.css             the whole stylesheet
 nav.js                mobile menu
@@ -55,7 +55,7 @@ assets/               EVERYTHING HERE IS DEPLOYED — keep it lean
   favicon.png           site icon
   brand/                partner + university logos
     norm/                 monochrome-normalised versions actually used on the site
-  news/                 one photo per news post, written by studio.html
+  news/                 one photo per news post
   photos/               web-ready WebP at 400/800/1600w
   publications/         one thumbnail per paper
   structures/lite/      16 PDB depositions, backbone + ligand (~95KB each)
@@ -67,7 +67,9 @@ scripts/              build steps — all run from the repo ROOT, never deployed
   prepare-photos.py        HEIC -> graded, resized WebP
   prepare-logos.py         normalise partner logos to one ink tone
   fetch-publications.py    rebuild publications-data.js + thumbnails
+  prepare-news-photo.py    one photo -> a web-ready .webp for a news post
   check-links.py           verify every referenced local file exists
+  check-news.py            verify news-data.js parses and is complete
 ```
 
 Every file in `assets/` is referenced by a page — that is enforced, not assumed.
@@ -100,12 +102,27 @@ can be regenerated from it; nothing in it can be regenerated from `assets/`.
 
 ## Adding a news post
 
-Nobody should ever edit HTML to publish news. Open **`studio.html`** in a browser
-— it is served with the site. Write the post in the form and it hands back a
-replacement `news-data.js` plus a resized, re-encoded photo. Drop those into the
-site folder and `assets/news/` respectively.
+Nobody should ever edit HTML to publish news. One file changes: **`news-data.js`**.
+
+```bash
+python scripts/prepare-news-photo.py <photo> <short-name>   # if there is a photo
+# ...write the post into news-data.js...
+python scripts/check-news.py
+git commit -am "news: ..." && git push
+```
 
 `HOW-TO-POST-NEWS.md` is the version to forward to someone who does not code.
+
+`check-news.py` runs inside `build.sh`, so a malformed post **fails the deploy**
+rather than silently emptying the news page — which is the whole failure mode
+worth engineering against, since the posts are one JSON array and a single
+missing comma takes out all of them at once.
+
+There used to be a `studio.html` — a browser form that generated `news-data.js`
+and resized the photo for you. It was removed: 650 lines of client-side JS whose
+output you still had to commit by hand, sitting on a public research site looking
+like an admin panel. The one thing it genuinely did is now
+`scripts/prepare-news-photo.py`.
 
 ---
 

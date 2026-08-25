@@ -30,3 +30,8 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+
+# Claude Code session state and worktrees. .claude/worktrees/ holds nested git
+# repositories; committing one would embed a broken half-repo that clones cannot
+# resolve.
+.claude/

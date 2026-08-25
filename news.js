@@ -2,8 +2,9 @@
 
    Reads news-data.js, which sets window.__TOOKE_NEWS. Rendered client-side for
    the same reason the publication list is: the page and the posts stay
-   separable, so adding news never means editing markup. studio.html writes that
-   data file, so in practice nobody involved ever opens an HTML file at all.
+   separable, so adding news never means editing markup. news-data.js is edited
+   by hand and validated at build time by scripts/check-news.py — a malformed
+   file fails the deploy rather than silently emptying this page.
 
    A plain .js file rather than JSON on purpose — fetch() is blocked on a
    file:// origin, so a JSON feed would leave the page empty for anyone who

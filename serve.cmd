@@ -17,7 +17,7 @@ echo.
 echo   The Tooke Lab — local preview
 echo   ------------------------------------------------
 echo   Site        http://localhost:8899/
-echo   News studio http://localhost:8899/studio.html
+echo   News page   http://localhost:8899/news.html
 echo.
 echo   Leave this window open. Ctrl+C to stop.
 echo.

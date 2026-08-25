@@ -116,6 +116,10 @@ Read the build log in the Pages dashboard. Realistically it is one of:
 - **`check-links.py` exited 1.** A page references a file that is not committed.
   The log names the page and the reference. This is the gate working — fix the
   reference or commit the file.
+- **`check-news.py` exited 1.** `news-data.js` will not parse, or a post is
+  missing something. Usually a comma between `}` and `{`, or a `"` inside the
+  text that is not written `\"`. The log names the post and the cause. Also the
+  gate working: the alternative is a live news page that is silently empty.
 - **`build.sh: not found`.** The build command lost its `sh ` prefix.
 - **Nothing deployed, no error.** Build output directory is not `_site`.
 
