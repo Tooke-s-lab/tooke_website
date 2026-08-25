@@ -12,6 +12,25 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<noscript>
+  <!-- No script, so there is no dialog to open and the buttons are inert. The
+       biographies are content, not decoration, so rather than lose them they
+       simply become part of each card. The "Read more" cue and the whole-card
+       click target go away with them, so nothing on the page promises
+       behaviour it cannot deliver. -->
+  <style>
+    .member-bio{ display:block !important; }
+    .member-more{ display:none; }
+    .member-btn{ cursor:auto; }
+    .member-btn::after{ content:none; }
+    .member{ align-items:start; }
+    .member-bio{
+      margin-top: clamp(12px,1.5vw,18px);
+      padding-top: clamp(12px,1.5vw,18px);
+      border-top: 1px solid rgba(15,26,22,.12);
+    }
+  </style>
+</noscript>
 </head>
 <body>
 
@@ -54,10 +73,24 @@
           <li class="member member--lead">
             <span class="avatar"><img src="assets/photos/person-cat-320.webp" alt="Catherine Tooke" width="320" height="320" loading="lazy" decoding="async"></span>
             <div class="who">
-              <span class="nm">Dr Catherine Tooke</span>
+              <span class="nm"><button class="member-btn" type="button" aria-haspopup="dialog">Dr Catherine Tooke</button></span>
               <span class="rl">Lecturer &amp; MRC Research Fellow</span>
               <span class="rl">Department of Life Sciences &amp; Centre for Evolution</span>
               <span class="rl">clt81 [at] bath.ac.uk</span>
+              <span class="member-more" aria-hidden="true">Read more</span>
+            </div>
+            <!-- WRITE THE BIOGRAPHY HERE. Ordinary paragraphs, as many as you
+                 like — people.js lifts whatever is inside this div into the
+                 dialog untouched, so there is nothing else to update. Latin
+                 until each person writes their own. -->
+            <div class="member-bio" id="bio-cat" hidden>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+              quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+              consequat.</p>
+              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+              dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+              proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             </div>
           </li>
         </ul>
@@ -71,25 +104,52 @@
           <li class="member">
             <span class="avatar"><img src="assets/photos/person-harry-320.webp" alt="Harry Morgan" width="320" height="320" loading="lazy" decoding="async"></span>
             <div class="who">
-              <span class="nm">Dr Harry Morgan</span>
+              <span class="nm"><button class="member-btn" type="button" aria-haspopup="dialog">Dr Harry Morgan</button></span>
               <span class="rl">Postdoctoral researcher</span>
               <span class="rl">hm745 [at] bath.ac.uk</span>
+              <span class="member-more" aria-hidden="true">Read more</span>
+            </div>
+            <div class="member-bio" id="bio-harry" hidden>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+              quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+              consequat.</p>
+              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+              dolore eu fugiat nulla pariatur.</p>
             </div>
           </li>
           <li class="member">
             <span class="avatar"><img src="assets/photos/person-joe-210.webp" alt="Joe Hoff" width="210" height="210" loading="lazy" decoding="async"></span>
             <div class="who">
-              <span class="nm">Joe Hoff</span>
+              <span class="nm"><button class="member-btn" type="button" aria-haspopup="dialog">Joe Hoff</button></span>
               <span class="rl">PhD student</span>
               <span class="rl">lr19354 [at] bristol.ac.uk</span>
+              <span class="member-more" aria-hidden="true">Read more</span>
+            </div>
+            <div class="member-bio" id="bio-joe" hidden>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+              quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+              consequat.</p>
+              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+              dolore eu fugiat nulla pariatur.</p>
             </div>
           </li>
           <li class="member">
             <span class="avatar"><img src="assets/photos/person-xandi-320.webp" alt="Xandi Drysdale" width="320" height="320" loading="lazy" decoding="async"></span>
             <div class="who">
-              <span class="nm">Xandi Drysdale</span>
+              <span class="nm"><button class="member-btn" type="button" aria-haspopup="dialog">Xandi Drysdale</button></span>
               <span class="rl">Undergraduate student</span>
               <span class="rl">ad2636 [at] bath.ac.uk</span>
+              <span class="member-more" aria-hidden="true">Read more</span>
+            </div>
+            <div class="member-bio" id="bio-xandi" hidden>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+              quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+              consequat.</p>
+              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+              dolore eu fugiat nulla pariatur.</p>
             </div>
           </li>
       </ul>
@@ -175,5 +235,6 @@
 </footer>
 
 <script src="pagehead.js"></script>
+<script src="people.js"></script>
 </body>
 </html>
