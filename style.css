@@ -1100,6 +1100,155 @@ body.splash header{
   color: rgba(15,26,22,.72); overflow-wrap:anywhere;
 }
 
+/* ---- Clickable member cards, and the biography dialog --------------------
+   The whole card takes the click, not a small link tucked under the address:
+   the card is what reads as one object, so the card is what should be
+   pressable. Only the NAME is the actual <button> though, with a stretched
+   ::after doing the rest — that way the control announces itself as
+   "Dr Harry Morgan" rather than reading out the entire card, email and all,
+   every time a screen reader lands on it.
+
+   The cost of that overlay is that text underneath it cannot be swiped and
+   copied, which matters on these particular cards because they carry email
+   addresses. The dialog repeats the address as ordinary selectable text, so
+   the address is still gettable — it just takes a click first. */
+.member{ position: relative; }
+.member .avatar{ transition: border-color .18s ease, transform .18s ease; }
+
+.member-btn{
+  font: inherit; color: inherit; text-align: left; cursor: pointer;
+  background: none; border: 0; padding: 0; margin: 0;
+}
+/* Negative inset so the hit area covers the card with a little room to spare.
+   The bleed stays well inside the grid gap, so no two cards ever overlap. */
+.member-btn::after{
+  content: ""; position: absolute;
+  inset: calc(-1 * clamp(8px, 1vw, 14px));
+}
+
+/* Hover and keyboard focus have to light up the whole CARD, driven by a button
+   nested two levels inside it — which is what :has is for. A browser without it
+   simply shows no hover state; the card still opens, and the focus ring on the
+   name is drawn by the global :focus-visible rule either way. */
+.member:has(.member-btn:hover) .avatar,
+.member:has(.member-btn:focus-visible) .avatar{
+  border-color: var(--teal-deep); transform: scale(1.03);
+}
+.member:has(.member-btn:hover) .nm,
+.member:has(.member-btn:focus-visible) .nm{
+  text-decoration: underline; text-decoration-color: var(--teal);
+  text-decoration-thickness: 1.5px; text-underline-offset: 3px;
+}
+
+/* The one visible promise that a card does something. Mono, like every other
+   small signpost on this site. aria-hidden in the markup: the button beside it
+   already says what it does, and "Read more" twice is noise. */
+.member-more{
+  font-family: var(--f-mono); font-size: clamp(10px, .78vw, 12px);
+  text-transform: uppercase; letter-spacing: .14em; font-weight: 500;
+  color: var(--teal-deep); margin-top: 7px;
+}
+.member-more::after{ content: " \2192"; }
+
+/* Carries the [hidden] attribute in normal use — this is the source the dialog
+   reads from, not something that renders. It only becomes visible with JS off
+   (see the <noscript> block in people.html) or in the no-<dialog> fallback,
+   hence grid-column: it is a third child of a two-column grid and would
+   otherwise squeeze itself into the column under the portrait. */
+.member-bio{ grid-column: 1 / -1; }
+.member--inline .member-bio{
+  margin-top: clamp(12px, 1.5vw, 18px);
+  padding-top: clamp(12px, 1.5vw, 18px);
+  border-top: 1px solid rgba(15,26,22,.12);
+}
+.member-bio p{ max-width: 62ch; }
+.member-bio p:last-child{ margin-bottom: 0; }
+
+/* ---- The dialog itself ---------------------------------------------------
+   A white card on a dimmed page, matching .lab-card: same white, same hairline,
+   same square corners. It is built by people.js and appended to <body>. */
+.bio-dialog{
+  /* No padding HERE on purpose. All of the visible card is .bio-inner, which
+     means a click landing on the dialog element itself can only have come from
+     the backdrop — that is what people.js tests to close on an outside click. */
+  padding: 0;
+  border: 1px solid rgba(15,26,22,.14);
+  background: #fff; color: var(--ink);
+  width: min(680px, calc(100vw - 2 * clamp(16px, 5vw, 48px)));
+  max-height: min(84vh, 780px);
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(15,26,22,.22);
+}
+/* Guarded on [open]: a bare display:flex would override the UA's display:none
+   and leave the dialog sitting on the page permanently. */
+.bio-dialog[open]{ display: flex; flex-direction: column; }
+.bio-dialog::backdrop{
+  background: rgba(15,26,22,.58);
+  backdrop-filter: blur(3px);
+}
+
+/* min-height:0 so this can actually shrink and scroll inside the flex column.
+   Without it a long bio pushes the dialog past max-height instead of scrolling. */
+.bio-inner{
+  flex: 1 1 auto; min-height: 0; overflow-y: auto;
+  padding: clamp(24px, 3.4vw, 44px);
+  scrollbar-width: thin;
+}
+
+.bio-close{
+  position: absolute; z-index: 2;
+  top: clamp(8px, 1.1vw, 14px); right: clamp(8px, 1.1vw, 14px);
+  width: 42px; height: 42px; display: grid; place-items: center;
+  font: 400 26px/1 var(--f-body); color: rgba(15,26,22,.62);
+  background: none; border: 0; cursor: pointer;
+  transition: color .18s ease, background-color .18s ease;
+}
+.bio-close:hover{ color: var(--ink); background: rgba(15,26,22,.07); }
+
+.bio-head{
+  display: grid; grid-template-columns: auto 1fr;
+  gap: clamp(14px, 1.9vw, 24px); align-items: center;
+}
+/* Runs a shade larger than the portrait on the card behind it. The dialog is
+   the place someone has chosen to look at a person properly, so the picture
+   gets to be the size of that decision rather than a thumbnail beside a name. */
+.bio-avatar{ width: clamp(120px, 15vw, 180px); }
+.bio-avatar[hidden]{ display: none; }
+/* Only the NAME reserves room for the close button, not the whole header. The
+   × sits in the top-right corner, and the name is the only line that can reach
+   it — a member with no photograph makes for a short header that starts right
+   up against it. Reserving on the header instead narrowed every role line by
+   40px too, which was enough to wrap Cat's department onto a second line. */
+.bio-name{
+  font-size: clamp(21px, 2.4vw, 30px); line-height: 1.1;
+  padding-right: 46px;
+}
+.bio-roles{ display: grid; gap: 3px; margin-top: 7px; }
+
+/* On a phone the enlarged portrait and the name cannot share a row without the
+   longer role lines — "Department of Life Sciences & Centre for Evolution" —
+   fraying into four or five words a line. Stacked, the picture keeps its size
+   and the text gets the full width. */
+@media (max-width: 560px){
+  .bio-head{ grid-template-columns: 1fr; justify-items: start; }
+  .bio-avatar{ width: clamp(120px, 38vw, 168px); }
+}
+
+.bio-text{
+  margin-top: clamp(18px, 2.2vw, 26px);
+  padding-top: clamp(18px, 2.2vw, 26px);
+  border-top: 1px solid rgba(15,26,22,.12);
+}
+.bio-text p{ max-width: 62ch; }
+.bio-text p:last-child{ margin-bottom: 0; }
+
+@media (prefers-reduced-motion: no-preference){
+  .bio-dialog[open]{ animation: bioIn .22s ease-out; }
+  .bio-dialog[open]::backdrop{ animation: bioFade .22s ease-out; }
+}
+@keyframes bioIn{ from{ opacity: 0; transform: translateY(10px); } }
+@keyframes bioFade{ from{ opacity: 0; } }
+
 /* ---- Partnerships and collaborators (bottom of the lab card) -------------- */
 .lab-group--partners{ }
 
