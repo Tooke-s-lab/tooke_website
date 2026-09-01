@@ -71,6 +71,22 @@ NEWS_QUALITY = 82     # matches prepare-news-photo.py
 NEWS_MAXW = 1400      # matches prepare-news-photo.py
 SCOPE_ASPECT = 4 / 3  # the frame the scope slideshow crops to
 
+# The full set of widths each family is designed around.
+#
+# Held here rather than read from the pages for one reason: a small upload drops
+# the rungs it cannot fill, and if the ladder were only ever "what the HTML
+# currently says", that drop would be permanent. The first 900px figure anybody
+# uploaded would quietly cap that slot at 800px forever, and no later photo,
+# however good, could raise it again. With a fixed ladder the change goes both
+# ways -- a big upload restores the rungs a small one removed.
+LADDERS = (
+    ("hero-", (1200, 1920, 2560)),
+    ("crystal-drops", (1200, 1920, 2560)),
+    ("scope-", (800, 1600)),
+    ("route-", (800,)),
+    ("person-", (320,)),
+)
+
 # Camera RAW extensions, kept only so a RAW upload gets a useful sentence rather
 # than a decode error. Every one of these is a TIFF underneath, so sniff() sees
 # them as "tiff" and Pillow then fails to make sense of the payload.
@@ -206,6 +222,84 @@ def prepare(im, slot):
     return grade(im)
 
 
+def ladder_for(slot, declared):
+    """Every width this slot could have, whether or not it currently has it.
+
+    The family ladder wins outright over what the pages currently say, rather
+    than being merged with it. Merging looks kinder and is a trap: an undersized
+    upload writes a one-off width into the HTML (565px, say), the next run reads
+    that back as a legitimate rung, and the slot carries the odd size for good.
+    Taking the ladder as authoritative means those one-offs are cleaned up by
+    the next upload instead of accumulating.
+    """
+    for prefix, widths in LADDERS:
+        if slot.startswith(prefix):
+            return sorted(widths)
+    return sorted(declared)
+
+
+def rewrite_refs(slot, old_widths, new_widths, dry_run):
+    """Point the pages at the sizes that now exist, and only those.
+
+    A photo that cannot fill the top of the ladder used to be refused outright.
+    That was too strict to live with: a figure from a paper or a microscope
+    capture is often 900px, and it is frequently the only copy in existence.
+
+    So the srcset shrinks to fit instead. Nothing is ever upscaled -- the file
+    written is exactly as big as the photo really is -- and because the page is
+    rewritten to match, it never asks for a size that does not exist, which is
+    the failure check-links.py was written for.
+    """
+    olds, news = sorted(old_widths), sorted(new_widths)
+    prefix = "%s/%s-" % (PHOTOS, slot)
+    changed = []
+
+    def nearest(w):
+        below = [n for n in news if n <= w]
+        return max(below) if below else min(news)
+
+    def rebuild(m):
+        body = m.group(1)
+        cands = [c.strip().split()[0] for c in body.split(",") if c.strip()]
+        # Only touch a srcset that is entirely this slot's. A mixed one would be
+        # destroyed by rebuilding it from one slot's widths.
+        if not cands or not all(c.startswith(prefix) for c in cands):
+            return m.group(0)
+        gap = re.search(r",\s*\n(\s*)", body)
+        sep = ",\n" + gap.group(1) if gap else ", "
+        return 'srcset="%s"' % sep.join(
+            "%s%d.webp %dw" % (prefix, w, w) for w in news)
+
+    for page in sorted(glob.glob("*.html")):
+        text = open(page, encoding="utf8", newline="").read()
+        if prefix not in text:
+            continue
+        # [^"]+ spans newlines, so this matches the srcsets written over
+        # several lines as well as the ones written on one.
+        out = SRCSET.sub(rebuild, text)
+
+        # Whatever is left pointing at a width that no longer exists -- the src
+        # fallback, and the url('...') the home-page cards use.
+        for w in olds:
+            if w not in news:
+                out = out.replace("%s%d.webp" % (prefix, w),
+                                  "%s%d.webp" % (prefix, nearest(w)))
+        if out != text:
+            if not dry_run:
+                open(page, "w", encoding="utf8", newline="").write(out)
+            changed.append(page)
+
+    # The dropped sizes are now referenced by nothing. Leaving them would break
+    # the rule that everything in assets/ is used by a page.
+    for w in olds:
+        if w not in news:
+            stale = "%s%d.webp" % (prefix, w)
+            if os.path.exists(stale) and not dry_run:
+                os.remove(stale)
+
+    return changed
+
+
 def sync_declared_sizes(rebuilt, dry_run):
     """Point each <img>'s declared width/height at what the new file actually is.
 
@@ -338,7 +432,14 @@ def open_source(path, problems):
         return None
 
     try:
-        im = Image.open(path)
+        # Read into memory rather than opening the path. Pillow keeps the file
+        # handle alive behind a lazily-decoded image, and Windows will not let
+        # you delete a file that is still open -- so the tidy-up at the end of a
+        # successful conversion failed there while working fine on Linux. A
+        # phone photo is a few MB; holding it in memory costs nothing.
+        with open(path, "rb") as f:
+            data = f.read()
+        im = Image.open(io.BytesIO(data))
         im.load()               # force the decode now, so a truncated upload
         return im               # fails here rather than halfway through a resize
     except Exception as e:
@@ -374,18 +475,28 @@ def do_replacements(slots, dry_run, problems, notes, done):
         if im is None:
             continue
 
-        widths = sorted(slots[stem])
+        declared = sorted(slots[stem])
         base = prepare(im, stem)
 
-        need = max(widths)
+        # A portrait is cropped square, so its limit is the short side.
         have = min(base.size) if stem.startswith("person-") else base.width
-        if have < need:
-            problems.append(
-                "%s is too small. %s is used at up to %dpx and your photo only "
-                "gives %dpx after cropping. Upscaling would look soft, and the "
-                "page would ask for a size that cannot exist. Use a larger "
-                "original." % (path, stem, need, have))
-            continue
+        ladder = ladder_for(stem, declared)
+        widths = [w for w in ladder if w <= have]
+        undersized = not widths
+
+        if undersized:
+            # Smaller than even the bottom of the ladder. Write it at its true
+            # size rather than refusing: it is usually a figure or a microscope
+            # capture, and often the only copy that exists. The browser will
+            # stretch it, so say so plainly -- and it is visible in the preview.
+            widths = [have]
+            notes.append(
+                "%s is only %dpx wide, smaller than the %dpx this slot normally "
+                "uses. It is written at its real size rather than being blown "
+                "up, so nothing is faked -- but the page will stretch it and it "
+                "WILL look soft, most of all on a laptop screen. Look at the "
+                "preview before merging, and use a bigger original if there is "
+                "one." % (path, have, min(ladder)))
 
         for w in widths:
             if stem.startswith("person-"):
@@ -399,14 +510,34 @@ def do_replacements(slots, dry_run, problems, notes, done):
             rebuilt.add(dst)
             done.append("%s  (%dx%d)" % (dst, out.width, out.height))
 
-        # Portraits are written at whatever width the page declares. If the
-        # source could have carried more detail, say so rather than silently
-        # throwing it away -- the fix is a one-line HTML change, not a reupload.
-        if stem.startswith("person-") and min(base.size) > max(widths):
-            notes.append("%s is declared at %dpx in the HTML, but your photo "
-                         "could support %dpx. Ask for the page to be updated if "
-                         "you want it sharper."
-                         % (stem, max(widths), min(base.size)))
+        if sorted(widths) != declared:
+            gone = [w for w in declared if w not in widths]
+            added = [w for w in widths if w not in declared]
+            rewrite_refs(stem, declared, widths, dry_run)
+            # A dropped width below the new top is a leftover being cleaned up,
+            # not a size the photo failed to reach. Saying "not big enough" for
+            # a 565px rung removed by a 4032px photo reads as nonsense.
+            too_big = [w for w in gone if w > max(widths)]
+            leftover = [w for w in gone if w <= max(widths)]
+            if too_big:
+                notes.append("%s: dropped the %s size%s, which your photo is "
+                             "not big enough for. The pages now ask only for "
+                             "what exists."
+                             % (stem, ", ".join("%dpx" % w for w in too_big),
+                                "" if len(too_big) == 1 else "s"))
+            if leftover:
+                notes.append("%s: removed the odd %s size left behind by an "
+                             "earlier undersized photo."
+                             % (stem, ", ".join("%dpx" % w for w in leftover)))
+            # Not when undersized: the one width there is the photo's own size,
+            # a fallback rather than a rung gained, and calling it an upgrade
+            # would contradict the warning printed directly above it.
+            if added and not undersized:
+                notes.append("%s: added the %s size%s, which the previous photo "
+                             "was too small for. Sharper on high-resolution "
+                             "screens."
+                             % (stem, ", ".join("%dpx" % w for w in added),
+                                "" if len(added) == 1 else "s"))
 
         if not dry_run:
             os.remove(path)

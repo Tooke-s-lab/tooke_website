@@ -141,11 +141,9 @@ half. The photo and the words are two separate steps.
 
 ## What it will refuse to do
 
-**Blow up a small photo.** The big header images are used at up to 2560 pixels
-wide. Give it something smaller and it stops rather than stretching it, because
-a stretched photo looks soft and the page would end up asking for a size that
-does not exist. Phone photos are around 4000 pixels, so this normally only
-happens with a screenshot or an image saved from a website.
+**Invent detail that is not there.** Nothing is ever blown up. If your picture
+is smaller than the site would like, it is saved at its real size and the page
+is adjusted to ask for that instead — see below.
 
 **Guess what you meant.** A name that is not on the list is rejected, not
 approximated.
@@ -159,6 +157,31 @@ file is named `.jpg`.
 **Publish a RAW file.** If your camera is set to RAW (`.dng`), upload the
 ordinary `.jpg` your phone saved of the very same shot instead — it is sitting
 right next to it in your camera roll.
+
+---
+
+## Small pictures
+
+A figure from a paper, a microscope capture, something saved off a website — these
+are often only 600 or 900 pixels wide, and frequently the only copy that exists.
+Those are fine. Upload them.
+
+The site normally holds each picture at two or three sizes, so that a phone
+downloads a small one and a large monitor gets a sharp one. If your picture
+cannot fill the bigger sizes, they are simply not made, and the page is rewritten
+to ask only for what exists. You will see a note saying so:
+
+> only 565px wide, smaller than the 800px this slot normally uses. It is written
+> at its real size rather than being blown up… but the page will stretch it and
+> it WILL look soft
+
+Nothing is faked — the file really is as detailed as your picture was. But the
+browser stretches it to fill the space, so it can look soft, most visibly on a
+laptop screen. **Look at the preview and judge it yourself.** Sometimes a
+slightly soft picture is exactly the right one. Sometimes it looks awful.
+
+If you later find a bigger version of the same thing, upload that over the top
+and the larger sizes come back automatically. Nothing is stuck.
 
 ---
 

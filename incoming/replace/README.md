@@ -38,16 +38,21 @@ cannot use your photo it says why, and changes nothing.
 Get one wrong and the bot prints the current list back at you, so you do not have
 to keep this table in your head.
 
-## Two things it will refuse
+## Small pictures are fine
 
-**A photo that is too small.** The big header images are used up to 2560px wide.
-Anything smaller gets rejected rather than blown up, because a stretched photo
-looks soft and the page would end up asking for a size that does not exist.
-Phone photos are about 4000px, so this normally only bites on a screenshot or
-something saved off a website.
+Nothing is ever blown up, but nothing is refused for being small either. A
+picture that cannot fill the larger sizes is written at its true size and the
+pages are rewritten to ask only for what exists — with a note warning that the
+browser will stretch it and it may look soft. Judge it from the preview.
+
+Upload a bigger version later and the larger sizes come back on their own.
+
+## What it will refuse
 
 **A name that is not in the table.** Better a clear complaint than a file quietly
 landing somewhere nobody looks.
+
+**A video or a RAW file**, with a sentence saying what to upload instead.
 
 ## What it does to the picture
 
