@@ -40,6 +40,27 @@
    ============================================================ */
 window.__TOOKE_NEWS = [
   {
+    "date": "2026-08-24",
+    "title": "A new paper on KPC inhibition",
+    "body": "[DEMO POST — delete before launch.] Placeholder body of about the length a real post would run to, so the lead block can be judged at a realistic size rather than against one short sentence.\n\nA second paragraph, because the lead is the one place two paragraphs will actually appear side by side with the photo.",
+    "photo": "demo-crystal-drop.webp",
+    "alt": "A crystallisation drop under the microscope."
+  },
+  {
+    "date": "2026-08-18",
+    "title": "Joe joins the lab",
+    "body": "[DEMO POST — delete before launch.] A short one, to show how a card looks when there is much less to say than the post above it.",
+    "photo": "demo-gel-dish.webp",
+    "alt": "A stained protein gel in a dish."
+  },
+  {
+    "date": "2026-08-15",
+    "title": "Poster prize at the SWSBC meeting, and a longer title to see how two lines wrap",
+    "body": "[DEMO POST — delete before launch.] This one has no photo at all, which is the layout case worth checking: the card has to hold its own in the grid next to two that do.",
+    "photo": null,
+    "alt": ""
+  },
+  {
     "date": "2026-08-12",
     "title": "Beamtime at Diamond",
     "body": "[Two or three sentences, first person and friendly. What we went to do, who went, and whether it worked. Cat to write.]",
