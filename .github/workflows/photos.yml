@@ -38,10 +38,14 @@ jobs:
         with:
           python-version: '3.12'
 
-      # pillow-heif is what makes iPhone photos usable at all; without it a
-      # HEIC upload is just an unreadable file.
+      # pillow-heif reads HEIC, which is what an iPhone shoots by default and
+      # what a Pixel shoots on "storage saver". Pillow 11.3 is the first release
+      # that reads AVIF without a plugin, and Google Photos hands out AVIF.
+      # Pinning the floor rather than the version keeps security updates coming.
       - name: Install Pillow
-        run: python -m pip install --quiet --disable-pip-version-check pillow pillow-heif
+        run: >
+          python -m pip install --quiet --disable-pip-version-check
+          'pillow>=11.3' pillow-heif
 
       - name: Convert
         id: convert

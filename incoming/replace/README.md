@@ -1,8 +1,15 @@
 # Drop a photo here to replace one on the site
 
 Upload a photo straight off your phone or camera. **Name it after the picture it
-replaces**, and nothing else — `hero-news.heic`, `person-joe.jpg`. The extension
-does not matter; HEIC, JPEG and PNG all work.
+replaces**, and nothing else — `hero-news.heic`, `person-joe.jpg`.
+
+The format does not matter. JPEG, HEIC, PNG, AVIF, WebP and TIFF all work, and
+the file is identified by what is inside it rather than by its name — so a photo
+that something renamed along the way still converts. Pixel *Ultra HDR* shots are
+ordinary JPEGs and need nothing special.
+
+Videos and camera RAW (`.dng`) are refused, with a sentence saying what to
+upload instead.
 
 Within a minute or so a bot converts it into every size the site needs, updates
 the pages, deletes your upload, and commits the result to this branch. If it

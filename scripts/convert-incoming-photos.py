@@ -34,21 +34,32 @@ Usage:  python scripts/convert-incoming-photos.py            (from the repo root
 Exit:   1 if an upload cannot be used, so it can fail a CI run visibly.
 """
 
+import io
 import os
 import re
 import sys
 import glob
 
-from PIL import Image, ImageOps, ImageEnhance
+from PIL import Image, ImageOps, ImageEnhance, ImageCms
 
-# Only needed for HEIC/HEIF, which is what phones produce. Imported lazily so
-# the script still runs for JPEG/PNG on a machine without it.
+# HEIC is what an iPhone produces by default and what a Pixel produces if its
+# camera is set to "storage saver". Optional so the script still runs for JPEG
+# and PNG on a machine without it; the workflow always installs it.
 try:
     import pillow_heif
     pillow_heif.register_heif_opener()
     HEIF = True
 except ImportError:
     HEIF = False
+
+# Pillow 11.3 and later read AVIF natively. Older ones can with a plugin, so try
+# that too rather than telling someone their perfectly good photo is unreadable.
+try:
+    import pillow_avif  # noqa: F401
+except ImportError:
+    pass
+
+SRGB = ImageCms.createProfile("sRGB")
 
 PHOTOS = "assets/photos"
 NEWS = "assets/news"
@@ -60,7 +71,11 @@ NEWS_QUALITY = 82     # matches prepare-news-photo.py
 NEWS_MAXW = 1400      # matches prepare-news-photo.py
 SCOPE_ASPECT = 4 / 3  # the frame the scope slideshow crops to
 
-RAW = (".heic", ".heif", ".jpg", ".jpeg", ".png", ".webp", ".tif", ".tiff")
+# Camera RAW extensions, kept only so a RAW upload gets a useful sentence rather
+# than a decode error. Every one of these is a TIFF underneath, so sniff() sees
+# them as "tiff" and Pillow then fails to make sense of the payload.
+RAW_EXT = (".dng", ".raw", ".arw", ".cr2", ".cr3", ".nef", ".orf", ".rw2",
+           ".raf", ".srw", ".pef")
 
 # Same reference shapes check-links.py looks for: src/href, srcset candidates,
 # and the inline url('...') the route cards use for their background.
@@ -133,9 +148,56 @@ def square_crop(im):
     return im.crop((x, y, x + side, y + side))
 
 
+def flatten_alpha(im):
+    """Put transparency onto white rather than letting it become black.
+
+    .convert("RGB") on a transparent PNG composites onto black, which turns a
+    screenshot's rounded corners into black notches. Nobody uploads a photo with
+    an alpha channel on purpose, but screenshots and exported figures have one.
+    """
+    if im.mode in ("RGBA", "LA") or (im.mode == "P" and "transparency" in im.info):
+        icc = im.info.get("icc_profile")
+        rgba = im.convert("RGBA")
+        white = Image.new("RGBA", rgba.size, (255, 255, 255, 255))
+        out = Image.alpha_composite(white, rgba).convert("RGB")
+        if icc:
+            out.info["icc_profile"] = icc     # convert() drops it; colour next
+        return out
+    return im
+
+
+def to_srgb(im):
+    """Convert a wide-gamut photo into sRGB instead of reinterpreting it.
+
+    Both Pixels and iPhones tag their photos Display P3, a wider gamut than the
+    sRGB a browser assumes when a file carries no profile. Dropping the profile
+    and keeping the numbers -- which is what .convert("RGB") does -- leaves every
+    colour reading as a more saturated version of itself: skin goes ruddy, the
+    teal in the branding goes acid. It looks like a deliberate grade, so it gets
+    argued about rather than fixed.
+
+    Converting properly and shipping no profile is the right pair: the numbers
+    are moved into sRGB, which is exactly what an untagged file is taken to be.
+    """
+    icc = im.info.get("icc_profile")
+    if not icc:
+        return im                              # untagged: already assumed sRGB
+    try:
+        src = ImageCms.ImageCmsProfile(io.BytesIO(icc))
+        if ImageCms.getProfileDescription(src).strip().lower().startswith("srgb"):
+            return im
+        return ImageCms.profileToProfile(im, src, SRGB, outputMode="RGB")
+    except Exception:
+        # A broken or exotic profile is not worth failing an upload over; the
+        # untagged fallback is what the site did before this existed.
+        return im
+
+
 def prepare(im, slot):
     """Everything that happens once, before the per-width resizes."""
     im = ImageOps.exif_transpose(im)      # phones record rotation in EXIF
+    im = flatten_alpha(im)
+    im = to_srgb(im)
     im = im.convert("RGB")
     if slot.startswith("person-"):
         return square_crop(im)
@@ -207,20 +269,93 @@ def uploads(folder):
     return found
 
 
-def open_source(path, problems):
-    ext = os.path.splitext(path)[1].lower()
-    if ext not in RAW:
-        problems.append("%s is a %s file. Upload a photo: %s."
-                        % (path, ext or "no-extension", ", ".join(RAW)))
-        return None
-    if ext in (".heic", ".heif") and not HEIF:
-        problems.append("%s is HEIC and pillow-heif is not installed here. "
-                        "Run: python -m pip install pillow-heif" % path)
-        return None
+def sniff(path):
+    """Identify the file from its first bytes rather than its name.
+
+    Extensions lie. Phones, chat apps and Google Photos all rename things on the
+    way out, people rename them by hand, and Windows hides the extension while
+    they do it. The bytes do not lie, so a photo saved as `.jpg` that is really
+    HEIC still converts, and a video renamed `.jpg` is still caught.
+    """
     try:
-        return Image.open(path)
+        with open(path, "rb") as f:
+            head = f.read(16)
+    except OSError:
+        return "unreadable"
+
+    if head[:3] == b"\xff\xd8\xff":
+        return "jpeg"
+    if head[:8] == b"\x89PNG\r\n\x1a\n":
+        return "png"
+    if head[:4] == b"RIFF" and head[8:12] == b"WEBP":
+        return "webp"
+    if head[:6] in (b"GIF87a", b"GIF89a"):
+        return "gif"
+    if head[4:8] == b"ftyp":
+        # One container, many meanings. The brand says which.
+        brand = head[8:12]
+        if brand in (b"heic", b"heix", b"heim", b"heis", b"hevc", b"hevx",
+                     b"hevm", b"hevs", b"mif1", b"msf1"):
+            return "heif"
+        if brand in (b"avif", b"avis"):
+            return "avif"
+        return "video"
+    if head[:2] in (b"II", b"MM"):
+        # TIFF byte order marks. Every camera RAW is a TIFF underneath, so this
+        # covers .dng/.cr2/.nef/.arw as well as an actual .tif.
+        return "tiff"
+    return "unknown"
+
+
+def open_source(path, problems):
+    """Open an upload, or explain -- in terms its owner can act on -- why not."""
+    kind = sniff(path)
+    ext = os.path.splitext(path)[1].lower()
+
+    if kind == "unreadable":
+        problems.append("%s could not be read at all." % path)
+        return None
+
+    if kind == "video":
+        problems.append(
+            "%s is a video, not a photo.\n"
+            "     If this came off a Pixel it is probably a Motion Photo. Open "
+            "it in Google Photos, use Export > Still photo (or the three-dot "
+            "menu > Export), and upload the still." % path)
+        return None
+
+    if kind == "heif" and not HEIF:
+        problems.append("%s is HEIC/HEIF and pillow-heif is not installed here. "
+                        "Run: python -m pip install pillow-heif\n"
+                        "     (On GitHub it is always installed, so this only "
+                        "happens when running the script locally.)" % path)
+        return None
+
+    if kind == "unknown":
+        problems.append("%s is not an image file. Its name says %s, but the "
+                        "contents are not a photo in any format this "
+                        "understands." % (path, ext or "no extension"))
+        return None
+
+    try:
+        im = Image.open(path)
+        im.load()               # force the decode now, so a truncated upload
+        return im               # fails here rather than halfway through a resize
     except Exception as e:
-        problems.append("%s could not be opened as an image (%s)." % (path, e))
+        if kind == "tiff" and ext in RAW_EXT:
+            problems.append(
+                "%s is a camera RAW file, which cannot be published directly.\n"
+                "     Your phone saved an ordinary .jpg of the same shot at the "
+                "same moment -- upload that one instead." % path)
+        elif kind == "avif":
+            problems.append(
+                "%s is an AVIF image and this copy of Pillow cannot read it "
+                "(needs Pillow 11.3 or newer). Re-save it as JPEG, or run "
+                "python -m pip install --upgrade pillow." % path)
+        else:
+            problems.append("%s looks like a %s file but could not be decoded "
+                            "(%s). It may have been truncated by the upload."
+                            % (path, kind, e))
         return None
 
 

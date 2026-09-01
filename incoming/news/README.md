@@ -1,8 +1,9 @@
 # Drop a photo here to use it in a news post
 
-Upload a photo straight off your phone. Call it whatever you like —
-`beamtime-october.heic`, `poster prize.jpg`. The name becomes the filename, so
-keep it short and descriptive.
+Upload a photo straight off your phone, in any format — JPEG, HEIC, PNG, AVIF,
+WebP or TIFF. Call it whatever you like — `beamtime-october.heic`,
+`poster prize.jpg`. The name becomes the filename, so keep it short and
+descriptive.
 
 A bot converts it, deletes your upload, and tells you the exact line to paste
 into `news-data.js`:

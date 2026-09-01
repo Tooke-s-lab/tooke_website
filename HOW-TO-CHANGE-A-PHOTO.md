@@ -17,12 +17,21 @@ small one and a big monitor gets a sharp one. The portraits are square crops. Th
 Scope slideshow images are cropped to 4:3. And every `<img>` on the site declares
 how big its picture is, so the page does not jump about while it loads.
 
-On top of that, photos off an iPhone are HEIC, a format **no browser can
-display**. Upload one directly and you get a broken image, even though the file
-looks perfectly fine on your Mac.
+On top of that, phone photos need converting. An iPhone shoots HEIC, a format
+**no browser can display** — upload one directly and you get a broken image,
+even though the file looks perfectly fine on your Mac. And every modern phone,
+Pixels included, records colour in a wider range than a web page uses, which has
+to be translated rather than just relabelled or everything comes out looking
+sunburnt.
 
 So a robot does all of it for you. You upload one photo; it makes the sizes,
-does the crops, corrects the pages, and throws your original away.
+does the crops, fixes the colour, corrects the pages, and throws your original
+away.
+
+**It does not care what format you give it.** JPEG, HEIC, PNG, AVIF, WebP, TIFF
+all work, and it identifies your photo by looking inside the file rather than
+trusting the name — so a HEIC that something along the way renamed `.jpg` still
+converts properly instead of breaking.
 
 ---
 
@@ -140,6 +149,30 @@ happens with a screenshot or an image saved from a website.
 
 **Guess what you meant.** A name that is not on the list is rejected, not
 approximated.
+
+**Publish a video.** A Pixel's *Motion Photo* is a short video with a still
+inside it, and sharing one sometimes hands you an `.mp4`. If that happens, open
+the photo in Google Photos, use **Export → Still photo**, and upload the result.
+The robot will tell you this if it happens; it recognises a video even when the
+file is named `.jpg`.
+
+**Publish a RAW file.** If your camera is set to RAW (`.dng`), upload the
+ordinary `.jpg` your phone saved of the very same shot instead — it is sitting
+right next to it in your camera roll.
+
+---
+
+## A note for Pixel owners
+
+Pixel 8 and later shoot **Ultra HDR** by default. These are ordinary `.jpg`
+files with extra brightness information tucked inside, so they upload and
+convert with no trouble at all.
+
+The one thing to know: web pages cannot show that extra brightness, so the
+picture on the site will look slightly flatter than it does in Google Photos on
+your phone. That is the web being the web, not the photo being converted badly.
+If a shot depends on that HDR punch to work, it will disappoint you here —
+choose one that stands up without it.
 
 ---
 
