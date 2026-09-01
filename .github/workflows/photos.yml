@@ -1,0 +1,91 @@
+# Converts a photo uploaded through the GitHub website into the files the site
+# actually needs, and commits the result back to the same branch.
+#
+# This exists so that changing a photo needs nothing but a browser. The work it
+# does -- HEIC decoding, three widths, a 4:3 or square crop, syncing the declared
+# width/height -- otherwise needs a clone, Python and Pillow on your own machine.
+#
+# It runs on every branch, so the normal route is: upload on a new branch, let
+# this convert, look at the Cloudflare preview, then merge.
+#
+# See HOW-TO-CHANGE-A-PHOTO.md for the human version.
+
+name: Convert uploaded photos
+
+on:
+  push:
+    paths:
+      - 'incoming/**'
+
+# The push this job makes is to the branch that triggered it. Two runs at once
+# on the same branch would race each other to push.
+concurrency:
+  group: photos-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # pillow-heif is what makes iPhone photos usable at all; without it a
+      # HEIC upload is just an unreadable file.
+      - name: Install Pillow
+        run: python -m pip install --quiet --disable-pip-version-check pillow pillow-heif
+
+      - name: Convert
+        id: convert
+        run: |
+          set -o pipefail
+          python scripts/convert-incoming-photos.py 2>&1 | tee /tmp/convert.log
+
+      # Same check that gates the Cloudflare deploy. Running it here means a bad
+      # result is visible on the pull request rather than at deploy time.
+      - name: Check every referenced file still exists
+        run: python scripts/check-links.py
+
+      - name: Commit the converted files
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "Nothing changed."
+            exit 0
+          fi
+          git config user.name  "tooke-lab photo bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Photos: convert uploads from incoming/
+
+          Written by .github/workflows/photos.yml from the files uploaded in
+          ${{ github.sha }}. The raw uploads are removed; only the web-ready
+          .webp files remain."
+          git push origin HEAD:${{ github.ref_name }}
+
+      # Runs even when the conversion failed, because the failure message is the
+      # thing worth reading -- it names the file and says what to do about it.
+      - name: Report
+        if: always()
+        run: |
+          {
+            echo '## Photo conversion'
+            echo
+            echo '```'
+            cat /tmp/convert.log 2>/dev/null || echo 'The conversion step did not run.'
+            echo '```'
+            echo
+            if [ '${{ steps.convert.outcome }}' = 'success' ]; then
+              echo 'The converted files are committed to this branch.'
+              echo 'Open the Cloudflare preview for this branch to see them on the site.'
+            else
+              echo 'Nothing was committed. Fix the problem above and upload again.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

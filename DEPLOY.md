@@ -95,7 +95,10 @@ leaves behind:
 
 - `scripts/` — the build toolchain
 - `serve.cmd`, `build.sh` — developer entry points
-- `README.md`, `DEPLOY.md`, `HOW-TO-POST-NEWS.md` — developer documentation
+- `README.md`, `DEPLOY.md`, `HOW-TO-POST-NEWS.md`,
+  `HOW-TO-CHANGE-A-PHOTO.md` — developer documentation
+- `incoming/` — raw uploads waiting to be converted, and normally empty
+- `.github/` — the workflow that converts them
 
 That last group is the reason the staging step exists at all. Deploying the repo
 root verbatim would put every one of these files on the public site, fetchable at

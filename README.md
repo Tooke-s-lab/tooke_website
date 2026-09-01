@@ -126,6 +126,33 @@ like an admin panel. The one thing it genuinely did is now
 
 ---
 
+## Changing a photo
+
+Photos are the one job that had no route for a non-technical person. A picture
+here is three files at three widths, or a square crop, or a 4:3 crop, plus an
+`<img>` declaring its own dimensions — and the source is an iPhone HEIC that no
+browser can display. All of that needed a clone, Python and Pillow.
+
+It now runs on GitHub instead. Uploading a photo into `incoming/replace/`, named
+after the picture it replaces, triggers `.github/workflows/photos.yml`, which
+runs `scripts/convert-incoming-photos.py`, commits the converted files back to
+the branch, and deletes the raw upload. Nobody needs a terminal.
+
+```bash
+# the same thing, locally
+python scripts/convert-incoming-photos.py [--dry-run]
+```
+
+The widths are read from the HTML, not from what happens to be on disk, so a
+slot can never be rebuilt at a width no page asks for, nor miss one that a page
+does — which is exactly the bug `check-links.py` was written for.
+
+`HOW-TO-CHANGE-A-PHOTO.md` is the version to forward to someone who does not
+code. Its most important instruction is *"choose the second radio button"*:
+upload on a branch, look at the Cloudflare preview, then merge.
+
+---
+
 ## Regenerating assets
 
 Everything in `assets/` is reproducible from the archive — nothing is hand-edited.

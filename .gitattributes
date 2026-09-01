@@ -22,6 +22,8 @@
 *.svg  text eol=lf
 *.pdb  text eol=lf
 _headers text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
 
 # Batch files are read by cmd.exe on Windows and stay CRLF.
 *.cmd  text eol=crlf
@@ -31,3 +33,12 @@ _headers text eol=lf
 *.webp binary
 *.ico  binary
 *.pptx binary
+
+# Raw uploads waiting to be converted. Mangling one is silent corruption:
+# git would rewrite bytes inside a JPEG that happen to look like line endings.
+*.heic binary
+*.heif binary
+*.jpg  binary
+*.jpeg binary
+*.tif  binary
+*.tiff binary
