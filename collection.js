@@ -5,23 +5,30 @@
    by scripts/cif-to-pdb.py, so all 16 load through one path. */
 (function () {
   var STRUCTURES = [
-    { id: "6QW9", name: "KPC-2 + relebactam",           year: "2019" },
-    { id: "6QWA", name: "KPC-3 + relebactam",           year: "2019" },
-    { id: "6QWB", name: "KPC-4 + relebactam",           year: "2019" },
-    { id: "6QWC", name: "KPC-4 + relebactam, 1 h soak", year: "2019" },
-    { id: "6QWD", name: "KPC-3, apo",                   year: "2019" },
-    { id: "6QWE", name: "KPC-4, apo",                   year: "2019" },
-    { id: "6QW8", name: "CTX-M-15 + relebactam",        year: "2019" },
-    { id: "6QW7", name: "L2 + relebactam",              year: "2019" },
-    { id: "6TD0", name: "KPC-2 + vaborbactam",          year: "2020" },
-    { id: "6TD1", name: "KPC-2 + taniborbactam",        year: "2020" },
-    { id: "6Z21", name: "KPC-2 E166Q, apo",             year: "2020" },
-    { id: "6Z23", name: "KPC-2 E166Q + cefotaxime",     year: "2020" },
-    { id: "6Z24", name: "KPC-2 E166Q + ceftazidime",    year: "2020" },
-    { id: "6Z25", name: "KPC-4 E166Q + ceftazidime",    year: "2020" },
     { id: "9F0V", name: "KPC-2 + benzoxaborole AK63",    year: "2025" },
-    { id: "9FBT", name: "KPC-2 + benzoxaborole AK431",   year: "2025" }
+    { id: "9FBT", name: "KPC-2 + benzoxaborole AK431",   year: "2025" },
+    { id: "6TD0", name: "KPC-2 + vaborbactam",           year: "2020" },
+    { id: "6TD1", name: "KPC-2 + taniborbactam",         year: "2020" },
+    { id: "6Z21", name: "KPC-2 E166Q, apo",              year: "2020" },
+    { id: "6Z23", name: "KPC-2 E166Q + cefotaxime",      year: "2020" },
+    { id: "6Z24", name: "KPC-2 E166Q + ceftazidime",     year: "2020" },
+    { id: "6Z25", name: "KPC-4 E166Q + ceftazidime",     year: "2020" },
+    { id: "6QW9", name: "KPC-2 + relebactam",            year: "2019" },
+    { id: "6QWA", name: "KPC-3 + relebactam",            year: "2019" },
+    { id: "6QWB", name: "KPC-4 + relebactam",            year: "2019" },
+    { id: "6QWC", name: "KPC-4 + relebactam, 1 h soak",  year: "2019" },
+    { id: "6QWD", name: "KPC-3, apo",                    year: "2019" },
+    { id: "6QWE", name: "KPC-4, apo",                    year: "2019" },
+    { id: "6QW8", name: "CTX-M-15 + relebactam",         year: "2019" },
+    { id: "6QW7", name: "L2 + relebactam",               year: "2019" }
   ];
+
+  // Newest first. The list above is already in that order; this sort is what
+  // guarantees it, so appending a new deposition at the bottom still shows it
+  // at the top. Deposition year is the only date we hold, and Array.sort is
+  // stable, so structures sharing a year keep the order written above -- which
+  // is grouped by enzyme (the KPC series, then CTX-M-15, then L2), not by ID.
+  STRUCTURES.sort(function (a, b) { return Number(b.year) - Number(a.year); });
 
   var catList = document.getElementById('catList');
   if (!catList) return;
