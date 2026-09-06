@@ -39,11 +39,4 @@
    See HOW-TO-POST-NEWS.md for the same thing written out at length.
    ============================================================ */
 window.__TOOKE_NEWS = [
-  {
-    "date": "2026-08-12",
-    "title": "Beamtime at Diamond",
-    "body": "[Two or three sentences, first person and friendly. What we went to do, who went, and whether it worked. Cat to write.]",
-    "photo": "news-beamtime-at-diamond.webp",
-    "alt": "[Placeholder image — replace with Cat's own photo from the trip, and describe it here.]"
-  }
 ];
