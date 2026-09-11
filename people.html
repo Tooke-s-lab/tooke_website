@@ -52,10 +52,13 @@
 
   <section class="pg-hero pg-hero--centre">
     <div class="pg-hero-bg">
-      <img class="pos-upper" src="assets/photos/hero-people-1920.webp"
-           srcset="assets/photos/hero-people-1200.webp 1200w, assets/photos/hero-people-1920.webp 1920w, assets/photos/hero-people-2028.webp 2028w"
-           sizes="100vw" width="1920" height="1392" fetchpriority="high"
-           alt="The group standing together in a beamline experimental hall.">
+      <!-- No pos-upper here: that 26% crop existed to hold faces in frame on the
+           group shot this replaced. On a room, it takes the ceiling; the benches
+           and instruments sit mid-frame, so the default centred crop is right. -->
+      <img src="assets/photos/hero-people-1920.webp"
+           srcset="assets/photos/hero-people-1200.webp 1200w, assets/photos/hero-people-1920.webp 1920w, assets/photos/hero-people-2560.webp 2560w"
+           sizes="100vw" width="1920" height="1446" fetchpriority="high"
+           alt="The lab at Bath: a central bench of reagents and pipettes, a benchtop centrifuge, and daylight from a full-height window.">
     </div>
     <div class="pg-hero-inner">
       <span class="pg-num">02</span>
