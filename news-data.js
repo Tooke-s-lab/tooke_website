@@ -39,4 +39,11 @@
    See HOW-TO-POST-NEWS.md for the same thing written out at length.
    ============================================================ */
 window.__TOOKE_NEWS = [
+{
+    "date": "2026-06-01",
+    "title": "Harry joins the lab",
+    "body": "Following completion of his PhD in AMR drug discovery and crystallography, Harry made the short journey across the Severn bridge to join the Tooke Lab at the University of Bath. Having spent 2 years of his PhD at Diamond Light Source, Harry aims to bring his crystallographic expertise in crystallisation optimisation, fragment screening, and drug discovery, and apply them to the research goals of the Tooke Lab. Harry is also dedicated to broaden his structural biology toolkit, by developing skills in neutron MX, MD simulations, and serial time-resolved crystallography. He is acutely interested in learning how these frontier techniques can be applied to understanding and overcoming resistance in PBPs and BLAs.",
+    "photo": "harry-joins.webp",
+    "alt": "Harry's graduation day in Cardiff."
+  }
 ];
