@@ -449,7 +449,7 @@
 
 .news-grid{
   display:grid; gap: clamp(18px,2.4vw,32px);
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
 }
 .news-grid:not(:empty){ margin-bottom: clamp(28px,4vw,48px); }
 .news-item{ border-top:2px solid var(--ink); padding-top: 16px; }
